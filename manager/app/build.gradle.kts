@@ -11,14 +11,23 @@ plugins {
 val managerVersionCode: Int by rootProject.extra
 val managerVersionName: String by rootProject.extra
 
-apksign {
-    storeFileProperty = "KEYSTORE_FILE"
-    storePasswordProperty = "KEYSTORE_PASSWORD"
-    keyAliasProperty = "KEY_ALIAS"
-    keyPasswordProperty = "KEY_PASSWORD"
-}
+//apksign {
+//    storeFileProperty = "KEYSTORE_FILE"
+//    storePasswordProperty = "KEYSTORE_PASSWORD"
+//    keyAliasProperty = "KEY_ALIAS"
+//    keyPasswordProperty = "KEY_PASSWORD"
+//}
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("../singer/platform.keystore")
+            storePassword = "android"
+            keyAlias = "platform"
+            keyPassword = "android"
+        }
+    }
     namespace = "me.weishu.kernelsu"
 
     buildTypes {
