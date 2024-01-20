@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name=".KernelSUApplication"
         android:allowBackup="true"
@@ -14,9 +16,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.KernelSU"
+        android:usesCleartextTraffic="true"
         tools:targetApi="33">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".activity.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.KernelSU">
             <intent-filter>
@@ -28,6 +31,18 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.KernelSU">
+
+        </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.KernelSU">
+
         </activity>
 
         <provider

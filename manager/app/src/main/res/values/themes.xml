@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.KernelSU" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Base.Theme.Oneghost" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+    <style name="Theme.KernelSU" parent="Theme.AppCompat.Light.NoActionBar"/>
+<!--    <style name="Theme.KernelSU" parent="android:Theme.Material.Light.NoActionBar">-->
+<!--    </style>-->
 </resources>

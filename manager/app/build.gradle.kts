@@ -22,9 +22,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile =
-                file("../singer/ghost.jks")
+                file("../singer/manger.jks")
             storePassword = "android"
-            keyAlias = "ghost"
+            keyAlias = "ghapp"
             keyPassword = "android"
         }
     }
@@ -35,7 +35,10 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             signingConfig = signingConfigs["release"]
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -61,7 +64,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
+    viewBinding{
+        enable = true
+    }
     externalNativeBuild {
         cmake {
             path("src/main/cpp/CMakeLists.txt")
@@ -123,4 +128,21 @@ dependencies {
     implementation(libs.sheet.compose.dialogs.input)
 
     implementation(libs.markdown)
+
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    implementation ("io.reactivex.rxjava2:rxandroid:2.0.1")
+    implementation ("io.reactivex.rxjava2:rxjava:2.1.8")
+    implementation ("com.squareup.retrofit2:retrofit:2.4.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.4.0")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.4.0")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation( "com.jakewharton.rxrelay2:rxrelay:2.1.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp:okhttp-urlconnection:2.2.0")
+
+    implementation ("org.greenrobot:eventbus:3.2.0")
 }

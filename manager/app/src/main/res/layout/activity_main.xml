@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rg_navigation"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <RadioGroup
+        android:id="@+id/rg_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_gravity="center"
+        android:background="@drawable/icomm_rb_bg"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/rb_paramets"
+            style="@style/driver_BottomNavigationMenu"
+            android:text="参数" />
+
+        <RadioButton
+            android:id="@+id/rb_backup"
+            style="@style/driver_BottomNavigationMenu"
+            android:text="备份" />
+
+        <RadioButton
+            android:id="@+id/rb_reset"
+            style="@style/driver_BottomNavigationMenu"
+            android:text="还原" />
+
+
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>
