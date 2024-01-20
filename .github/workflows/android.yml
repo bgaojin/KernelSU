@@ -98,7 +98,7 @@ jobs:
           } >> gradle.properties
           sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
           ./gradlew clean assembleRelease
-          
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
