@@ -22,10 +22,10 @@ android {
     signingConfigs {
         create("release") {
             storeFile =
-                file("../singer/my.jks")
-            storePassword = "123456"
-            keyAlias = "key0"
-            keyPassword = "123456"
+                file("../singer/ghost.jks")
+            storePassword = "android"
+            keyAlias = "ghost"
+            keyPassword = "android"
         }
     }
     namespace = "me.weishu.kernelsu"
