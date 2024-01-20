@@ -52,7 +52,4 @@ jobs:
         with:
           files: |
             manager/*.apk
-            AnyKernel3-*.zip
-            boot-images-*/Image-*/*.img.gz
-            kernel-WSA*.zip
-            kernel-ARCVM*.zip
+          
