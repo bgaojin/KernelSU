@@ -123,7 +123,7 @@ class SuperUserViewModel : ViewModel() {
     suspend fun fetchAppList() {
 
         isRefreshing = true
-
+        //连接服务,获取包信息等等
         val result = connectKsuService {
             Log.w(TAG, "KsuService disconnected")
         }

@@ -165,7 +165,7 @@ private fun AppProfileInner(
                 leadingContent = appIcon,
             )
         }
-
+        //切换root
         SwitchItem(
             icon = Icons.Filled.Security,
             title = stringResource(id = R.string.superuser),

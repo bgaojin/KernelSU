@@ -29,6 +29,7 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.EventMessage;
 import me.weishu.kernelsu.databinding.FragmentParametsBinding;
@@ -149,6 +150,36 @@ public class ParametsFragment extends Fragment {
                 });
 
 
+            }
+        });
+
+        mainBinding.setroot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String packageInfos = (String) mainBinding.app.getSelectedItem();
+                if (TextUtils.isEmpty(packageInfos)) {
+                    return;
+                }
+                String[] split = packageInfos.split("--");
+                String packageName = split[1];
+                try {
+                    ApplicationInfo applicationInfo = getContext().getPackageManager().getApplicationInfo(packageName, 0);
+                    int uid = applicationInfo.uid;
+                    System.out.println("setroot-uid="+uid);
+                    Natives.Profile appProfile = Natives.INSTANCE.getAppProfile(packageInfos, uid);
+                    boolean allowSu = appProfile.getAllowSu();
+                    System.out.println("allowSu=="+allowSu);
+                    allowSu = true;
+                    Natives.Profile copy = appProfile.copy(appProfile.getName(),appProfile.getCurrentUid(),
+                            true,appProfile.getRootUseDefault(),appProfile.getRootTemplate(),
+                            appProfile.getUid(),appProfile.getGid(),appProfile.getGroups(),appProfile.getCapabilities(),
+                            appProfile.getContext(),appProfile.getNamespace(),appProfile.getNonRootUseDefault(),
+                            appProfile.getUmountModules(),appProfile.getRules());
+                    boolean setAppProfile = Natives.INSTANCE.setAppProfile(copy);
+                    System.out.println("setAppProfile="+setAppProfile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -109,6 +109,7 @@ fun SuperUserScreen(navigator: DestinationsNavigator) {
         ) {
             LazyColumn(Modifier.fillMaxSize()) {
                 items(viewModel.appList, key = { it.packageName + it.uid }) { app ->
+                    //条目点击事件
                     AppItem(app) {
                         navigator.navigate(AppProfileScreenDestination(app))
                     }
