@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.bean.LoginResult;
 import me.weishu.kernelsu.databinding.LoginActivityBinding;
@@ -33,7 +34,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
-
+        String packageName = getPackageName();
+        boolean b = Natives.INSTANCE.becomeManager(packageName);
+        System.out.println("packageName="+packageName);
+        System.out.println("b="+b);
         String token = SpUtils.getInstance().getString("token", "");
         if (!TextUtils.isEmpty(token)) {
             String url = "http://127.0.0.1:1991/app/v1/setToken?token="+token;
@@ -48,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
             finish();
             return;
         }
