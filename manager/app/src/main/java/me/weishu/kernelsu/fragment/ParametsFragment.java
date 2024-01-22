@@ -169,11 +169,11 @@ public class ParametsFragment extends Fragment {
                     Natives.Profile profile = Natives.INSTANCE.getAppProfile(packageInfos, uid);
                     boolean allowSu = profile.getAllowSu();
                     System.out.println("allowSu=="+allowSu);
-                    Natives.Profile copy = profile.copy(profile.getName(),profile.getCurrentUid(),
-                            true,true,profile.getRootTemplate(),
-                            profile.getUid(),profile.getGid(),profile.getGroups(),profile.getCapabilities(),
-                            profile.getContext(),profile.getNamespace(),profile.getNonRootUseDefault(),
-                            profile.getUmountModules(),profile.getRules());
+                    Natives.Profile copy = profile.copy(packageName,profile.getCurrentUid(),
+                            true,true,null,
+                            0,0,new ArrayList<>(),new ArrayList<>(),
+                            "u:r:su:s0",0,true,
+                            true,"");
                     System.out.println("copy==="+copy.toString());
                     boolean result = Natives.INSTANCE.setAppProfile(copy);
                     System.out.println("setAppProfile="+result);
