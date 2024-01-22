@@ -174,6 +174,7 @@ public class ParametsFragment extends Fragment {
                             profile.getUid(),profile.getGid(),profile.getGroups(),profile.getCapabilities(),
                             profile.getContext(),profile.getNamespace(),profile.getNonRootUseDefault(),
                             profile.getUmountModules(),profile.getRules());
+                    System.out.println("copy==="+copy.toString());
                     boolean result = Natives.INSTANCE.setAppProfile(copy);
                     System.out.println("setAppProfile="+result);
                     if (result){
