@@ -170,7 +170,7 @@ public class ParametsFragment extends Fragment {
                     boolean allowSu = profile.getAllowSu();
                     System.out.println("allowSu=="+allowSu);
                     Natives.Profile copy = profile.copy(profile.getName(),profile.getCurrentUid(),
-                            true,profile.getRootUseDefault(),profile.getRootTemplate(),
+                            true,true,profile.getRootTemplate(),
                             profile.getUid(),profile.getGid(),profile.getGroups(),profile.getCapabilities(),
                             profile.getContext(),profile.getNamespace(),profile.getNonRootUseDefault(),
                             profile.getUmountModules(),profile.getRules());

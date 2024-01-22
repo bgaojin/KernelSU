@@ -170,7 +170,12 @@ private fun AppProfileInner(
             icon = Icons.Filled.Security,
             title = stringResource(id = R.string.superuser),
             checked = isRootGranted,
-            onCheckedChange = { onProfileChange(profile.copy(allowSu = it)) },
+            onCheckedChange = {
+                val copy = profile.copy(allowSu = it)
+                println("copy=$copy")
+                println("copy=${copy.toString()}")
+                onProfileChange(copy)
+            },
         )
 
         Crossfade(targetState = isRootGranted, label = "") { current ->

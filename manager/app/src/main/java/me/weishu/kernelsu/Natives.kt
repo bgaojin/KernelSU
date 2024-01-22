@@ -99,6 +99,7 @@ object Natives {
         val nonRootUseDefault: Boolean = true,
         val umountModules: Boolean = true,
         var rules: String = "", // this field is save in ksud!!
+
     ) : Parcelable {
         enum class Namespace {
             INHERITED,
@@ -107,5 +108,11 @@ object Natives {
         }
 
         constructor() : this("")
+
+        override fun toString(): String {
+            return "Profile(name='$name', currentUid=$currentUid, allowSu=$allowSu, rootUseDefault=$rootUseDefault, rootTemplate=$rootTemplate, uid=$uid, gid=$gid, groups=$groups, capabilities=$capabilities, context='$context', namespace=$namespace, nonRootUseDefault=$nonRootUseDefault, umountModules=$umountModules, rules='$rules')"
+        }
+
+
     }
 }
