@@ -165,20 +165,19 @@ public class ParametsFragment extends Fragment {
                 try {
                     ApplicationInfo applicationInfo = getContext().getPackageManager().getApplicationInfo(packageName, 0);
                     int uid = applicationInfo.uid;
-                    System.out.println("setroot-uid="+uid);
                     Natives.Profile profile = Natives.INSTANCE.getAppProfile(packageInfos, uid);
-                    boolean allowSu = profile.getAllowSu();
-                    System.out.println("allowSu=="+allowSu);
+
                     Natives.Profile copy = profile.copy(packageName,profile.getCurrentUid(),
                             true,true,null,
                             0,0,new ArrayList<>(),new ArrayList<>(),
                             "u:r:su:s0",0,true,
                             true,"");
-                    System.out.println("copy==="+copy.toString());
                     boolean result = Natives.INSTANCE.setAppProfile(copy);
-                    System.out.println("setAppProfile="+result);
+
                     if (result){
                         showMsg("设置成功");
+                    }else{
+                        showMsg("设置失败");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
