@@ -166,17 +166,19 @@ public class ParametsFragment extends Fragment {
                     ApplicationInfo applicationInfo = getContext().getPackageManager().getApplicationInfo(packageName, 0);
                     int uid = applicationInfo.uid;
                     System.out.println("setroot-uid="+uid);
-                    Natives.Profile appProfile = Natives.INSTANCE.getAppProfile(packageInfos, uid);
-                    boolean allowSu = appProfile.getAllowSu();
+                    Natives.Profile profile = Natives.INSTANCE.getAppProfile(packageInfos, uid);
+                    boolean allowSu = profile.getAllowSu();
                     System.out.println("allowSu=="+allowSu);
-                    allowSu = true;
-                    Natives.Profile copy = appProfile.copy(appProfile.getName(),appProfile.getCurrentUid(),
-                            true,appProfile.getRootUseDefault(),appProfile.getRootTemplate(),
-                            appProfile.getUid(),appProfile.getGid(),appProfile.getGroups(),appProfile.getCapabilities(),
-                            appProfile.getContext(),appProfile.getNamespace(),appProfile.getNonRootUseDefault(),
-                            appProfile.getUmountModules(),appProfile.getRules());
-                    boolean setAppProfile = Natives.INSTANCE.setAppProfile(copy);
-                    System.out.println("setAppProfile="+setAppProfile);
+                    Natives.Profile copy = profile.copy(profile.getName(),profile.getCurrentUid(),
+                            true,profile.getRootUseDefault(),profile.getRootTemplate(),
+                            profile.getUid(),profile.getGid(),profile.getGroups(),profile.getCapabilities(),
+                            profile.getContext(),profile.getNamespace(),profile.getNonRootUseDefault(),
+                            profile.getUmountModules(),profile.getRules());
+                    boolean result = Natives.INSTANCE.setAppProfile(copy);
+                    System.out.println("setAppProfile="+result);
+                    if (result){
+                        showMsg("设置成功");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
