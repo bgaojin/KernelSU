@@ -13,11 +13,16 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.topjohnwu.superuser.Shell;
+import com.topjohnwu.superuser.ShellUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -30,6 +35,7 @@ import me.weishu.kernelsu.databinding.FragmentResetBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.net.HttpUtils;
+import me.weishu.kernelsu.ui.util.KsuCli;
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
@@ -45,7 +51,7 @@ public class ResetFragment extends Fragment {
 
     private RestoreAdapter restoreAdapter;
     private ArrayList<String> fileNames;
-    private String backPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/backData";
+    private String backPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/service/appBackup";
     private ArrayList<String> list;
 
     @Nullable
@@ -91,14 +97,31 @@ public class ResetFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN,sticky = true,priority = 1)
     public void onReceiveMsg(EventMessage message) {
-        if (message.getType()== EventCode.SLELECT_BACKUP){
+        if (message.getType()== EventCode.SLELECT_REST){
             list.clear();
+            System.out.println("backPath="+backPath);
+            String s1 = ShellUtils.fastCmd("su", "cd /sdcard/service/appBackup", "ls");
+            System.out.println("s1s1s1="+s1);
             File files = new File(backPath);
+            if (!files.exists()) {
+                files.mkdirs();
+            }
+            try {
+                File ficccles = new File(backPath+"/为什么.txt");
+                ficccles.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("dasf="+files.isDirectory());
+            System.out.println("dasf="+files.exists());
+            System.out.println("dasf="+files.exists());
             String[] strFileNames = files.list();
-            System.out.println("strFileNames="+strFileNames);
+            System.out.println("dasf="+strFileNames);
+            System.out.println("dasf="+files.listFiles().length);
             if (strFileNames==null){
                 return;
             }
+            System.out.println("dasf="+strFileNames.length);
             for (int i = 0; i < strFileNames.length; i++) {
                 try {
                     String s = strFileNames[i];

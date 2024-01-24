@@ -50,6 +50,10 @@ public class CommonRetrofitManager extends BaseRetrofitManager {
         return mCommonService.startVpn(ip, port,userName,pwd).compose(RxSchedulers.applySchedulers());
     }
 
+    public Observable<HttpResult> closeVpn() {
+        return mCommonService.closeVpn().compose(RxSchedulers.applySchedulers());
+    }
+
     public Observable<HttpResult> backUpApp(String pkgName) {
         return mCommonService.backUpApp(pkgName).compose(RxSchedulers.applySchedulers());
     }

@@ -1,13 +1,19 @@
 package me.weishu.kernelsu.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -20,11 +26,12 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.EventMessage;
 import me.weishu.kernelsu.databinding.ActivityMainBinding;
 import me.weishu.kernelsu.fragment.BackUpFragment;
-import me.weishu.kernelsu.fragment.ParametsFragment;
+import me.weishu.kernelsu.fragment.SetPropFragment;
 import me.weishu.kernelsu.fragment.ResetFragment;
 import me.weishu.kernelsu.utils.EventCode;
 
@@ -37,14 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ActivityMainBinding mainBinding;
-
+    String[] permiss = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE};
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
+
         ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         mainBinding = activityMainBinding;
         setContentView(activityMainBinding.getRoot());
-
+        mainBinding.tvTitle.title.setText("主页");
         mainBinding.rbParamets.setChecked(true);
         mFragmentManager = getSupportFragmentManager();
         String[] tabSArray = new String[]{"one", "two", "three"};
@@ -56,11 +64,14 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.rb_paramets) {
                     mCurrIndex = 0;
+                    mainBinding.tvTitle.title.setText("主页");
                 } else if (i == R.id.rb_backup) {
                     mCurrIndex = 1;
+                    mainBinding.tvTitle.title.setText("备份");
                 } else if (i == R.id.rb_reset) {
                     mCurrIndex = 2;
-                    EventBus.getDefault().postSticky(new EventMessage(EventCode.SLELECT_BACKUP));
+                    mainBinding.tvTitle.title.setText("还原");
+                    EventBus.getDefault().postSticky(new EventMessage(EventCode.SLELECT_REST));
                 }
                 showFragment();
             }
@@ -109,9 +120,47 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, RootMangerActivity.class));
             }
         });
+
+        String packageName = getPackageName();
+        boolean manager = Natives.INSTANCE.becomeManager(packageName);
+        if (manager){
+            try {
+                ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(packageName, 0);
+                Natives.Profile profile = Natives.INSTANCE.getAppProfile(packageName, applicationInfo.uid);
+                if (!profile.getAllowSu()){
+                    Natives.Profile copy = profile.copy(packageName,profile.getCurrentUid(),
+                            true,true,null,
+                            0,0,new ArrayList<>(),new ArrayList<>(),
+                            "u:r:su:s0",0,true,
+                            true,"");
+
+                    boolean result = Natives.INSTANCE.setAppProfile(copy);
+                    System.out.println("result="+result);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+//        requestPermission();
+//        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+//        Uri uri = Uri.fromParts("package", getPackageName(), null);
+//        intent.setData(uri);
+//        startActivity(intent);
+    }
+    private static final int PERMISSIONS_REQUEST_PHONE_STATE = 1;
+    public void requestPermission(){
+        ActivityCompat.requestPermissions(MainActivity.this,permiss,PERMISSIONS_REQUEST_PHONE_STATE);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode==PERMISSIONS_REQUEST_PHONE_STATE){
 
+        }
+    }
     private void showFragment() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(mFragmentTags.get(mCurrIndex));
@@ -139,13 +188,13 @@ public class MainActivity extends AppCompatActivity {
     private Fragment instantFragment(int mCurrIndex) {
         switch (mCurrIndex) {
             case 0://
-                return new ParametsFragment();
+                return new SetPropFragment();
             case 1:
                 return new BackUpFragment();
             case 2:
                 return new ResetFragment();
             default:
-                return new ParametsFragment();
+                return new SetPropFragment();
         }
 
     }

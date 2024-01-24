@@ -35,6 +35,9 @@ public interface CommonService {
     @GET("/app/v1/startVpn")
     Observable<HttpResult> startVpn(@Query("ip") String ip, @Query("port") String port, @Query("userName") String userName, @Query("pwd") String pwd);
 
+    @GET("/app/v1/closeVpn")
+    Observable<HttpResult> closeVpn();
+
     @GET("/app/v1/backUpApp")
     Observable<HttpResult> backUpApp(@Query("destPackageInfos") String destPackageInfos);
 }

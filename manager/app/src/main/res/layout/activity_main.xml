@@ -10,18 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <TextView
+        <include
             android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="#3d74c7"
-            android:gravity="center"
-            android:text="首页"
-            android:textColor="@color/white"
-            android:textSize="23sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            layout="@layout/title"/>
 
         <ImageView
             android:id="@+id/open_menu"
@@ -71,7 +62,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
 

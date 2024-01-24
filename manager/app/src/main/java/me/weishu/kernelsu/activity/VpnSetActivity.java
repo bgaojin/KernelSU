@@ -19,6 +19,7 @@ import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.net.HttpUtils;
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.GsonUtils;
+import me.weishu.kernelsu.utils.VpnUtils;
 
 public class VpnSetActivity extends AppCompatActivity {
 
@@ -29,6 +30,7 @@ public class VpnSetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityVpnSetBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.tvTitle.title.setText("VPN设置");
         ProgressDialog dialog = new ProgressDialog(this);
         binding.startVpn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,17 +56,17 @@ public class VpnSetActivity extends AppCompatActivity {
                     return;
                 }
                 dialog.setMessage("开启中...");
-                if (!dialog.isShowing()){
+                if (!dialog.isShowing()) {
                     dialog.show();
                 }
 
 
-                CommonRetrofitManager.getInstance().startVpn(ip,port,userName,pwd).subscribe(new Consumer<HttpResult>() {
+                CommonRetrofitManager.getInstance().startVpn(ip, port, userName, pwd).subscribe(new Consumer<HttpResult>() {
                     @Override
                     public void accept(HttpResult result) throws Exception {
                         if ("1".equals(result.getRet())) {
                             showMsg("开启成功");
-                        }else{
+                        } else {
                             showMsg("开启失败");
                         }
                         dialog.dismiss();
@@ -80,9 +82,42 @@ public class VpnSetActivity extends AppCompatActivity {
 
             }
         });
+
+        binding.closeVpn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!VpnUtils.hasVpn(VpnSetActivity.this)){
+                    return;
+                }
+                dialog.setMessage("关闭中...");
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+
+                CommonRetrofitManager.getInstance().closeVpn().subscribe(new Consumer<HttpResult>() {
+                    @Override
+                    public void accept(HttpResult result) throws Exception {
+                        if ("1".equals(result.getRet())) {
+                            showMsg("关闭成功");
+                        } else {
+                            showMsg("关闭失败");
+                        }
+                        dialog.dismiss();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        showMsg("关闭失败");
+                        dialog.dismiss();
+                    }
+                });
+
+            }
+        });
     }
 
     private void showMsg(String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

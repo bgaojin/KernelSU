@@ -42,7 +42,7 @@ public class RootMangerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityRootMangerBinding inflate = ActivityRootMangerBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
-
+        inflate.tvTitle.title.setText("ROOT管理");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         inflate.appList.setLayoutManager(manager);
@@ -58,15 +58,14 @@ public class RootMangerActivity extends AppCompatActivity {
                 ArrayList<RootResult> results = new ArrayList<>();
                 for (AppItem app : apps) {
                     String pkgName = app.getPackageName();
-                    System.out.println("pkgName="+pkgName);
-                    System.out.println("app.getUid()="+app.getUid());
+
                     Natives.Profile profile = Natives.INSTANCE.getAppProfile(pkgName, app.getUid());
 
                     Natives.Profile copy = profile.copy(pkgName,profile.getCurrentUid(),
-                            false,false,null,
+                            false,true,null,
                             0,0,new ArrayList<>(),new ArrayList<>(),
-                            "",0,false,
-                            false,"");
+                            "u:r:su:s0",0,true,
+                            true,"");
 
                     boolean result = Natives.INSTANCE.setAppProfile(copy);
                     RootResult rootResult = new RootResult();
@@ -86,6 +85,7 @@ public class RootMangerActivity extends AppCompatActivity {
                 }else{
                     showMsg("设置成功");
                 }
+                adapter.notifyDataSetChanged();
             }
         });
 

@@ -4,18 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <include
         android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#3d74c7"
-        android:gravity="center"
-        android:text="ROOT管理"
-        android:textColor="@color/white"
-        android:textSize="23sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_list"
