@@ -40,4 +40,7 @@ public interface CommonService {
 
     @GET("/app/v1/backUpApp")
     Observable<HttpResult> backUpApp(@Query("destPackageInfos") String destPackageInfos);
+
+    @GET("/app/v1/setToken")
+    Observable<HttpResult> setToken(@Query("token") String token);
 }

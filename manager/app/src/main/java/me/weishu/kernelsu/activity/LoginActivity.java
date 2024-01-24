@@ -65,7 +65,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (loginResult.getCode() == 1) {
                     String token = loginResult.getData().getToken();
-                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
+//                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
+                    setToken(token);
                     SpUtils.getInstance().putString("token", token);
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -82,6 +83,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setToken(String token) {
+        CommonRetrofitManager.getInstance().setToken(token).subscribe(new Consumer<HttpResult>() {
+            @Override
+            public void accept(HttpResult result) throws Exception {
+
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+
+            }
+        });
     }
 
 }

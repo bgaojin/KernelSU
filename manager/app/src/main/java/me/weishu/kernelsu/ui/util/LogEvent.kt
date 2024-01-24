@@ -2,6 +2,7 @@ package me.weishu.kernelsu.ui.util
 
 import android.content.Context
 import android.os.Build
+import android.os.Environment
 import android.system.Os
 import com.topjohnwu.superuser.ShellUtils
 import me.weishu.kernelsu.Natives
@@ -91,7 +92,8 @@ fun getBugreportFile(context: Context): File {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm")
     val current = LocalDateTime.now().format(formatter)
 
-    val targetFile = File(context.cacheDir, "KernelSU_bugreport_${current}.tar.gz")
+//    val targetFile = File(context.cacheDir, "KernelSU_bugreport_${current}.tar.gz")
+    val targetFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath, "KernelSU_bugreport_${current}.tar.gz")
 
     shell.newJob().add("tar czf ${targetFile.absolutePath} -C ${bugreportDir.absolutePath} .").exec()
     shell.newJob().add("rm -rf ${bugreportDir.absolutePath}").exec()

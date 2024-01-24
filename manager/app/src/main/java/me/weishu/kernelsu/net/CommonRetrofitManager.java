@@ -46,8 +46,8 @@ public class CommonRetrofitManager extends BaseRetrofitManager {
         return mCommonService.modifyPhone(pkgName, sdkVersion).compose(RxSchedulers.applySchedulers());
     }
 
-    public Observable<HttpResult> startVpn(String ip, String port, String userName,String pwd) {
-        return mCommonService.startVpn(ip, port,userName,pwd).compose(RxSchedulers.applySchedulers());
+    public Observable<HttpResult> startVpn(String ip, String port, String userName, String pwd) {
+        return mCommonService.startVpn(ip, port, userName, pwd).compose(RxSchedulers.applySchedulers());
     }
 
     public Observable<HttpResult> closeVpn() {
@@ -56,5 +56,9 @@ public class CommonRetrofitManager extends BaseRetrofitManager {
 
     public Observable<HttpResult> backUpApp(String pkgName) {
         return mCommonService.backUpApp(pkgName).compose(RxSchedulers.applySchedulers());
+    }
+
+    public Observable<HttpResult> setToken(String token) {
+        return mCommonService.setToken(token).compose(RxSchedulers.applySchedulers());
     }
 }

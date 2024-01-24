@@ -38,7 +38,7 @@ public class HttpUrlInterceptor implements Interceptor {
     private boolean shouldChangeUrl(String url) {
 
         if (url.contains("setToken") || url.contains("startVpn")|| url.contains("closeVpn") || url.contains("backUpApp")
-                || url.contains("modifyPhone") || url.contains("resetApp")) {
+                || url.contains("modifyPhone") || url.contains("resetApp")|| url.contains("setToken")) {
             return true;
         }
         return false;
