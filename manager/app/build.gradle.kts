@@ -30,7 +30,7 @@ android {
             storeFile =
                 file("../singer/ghost.jks")
             storePassword = "android"
-            keyAlias = "ghapp"
+            keyAlias = "ghost"
             keyPassword = "android"
         }
     }
