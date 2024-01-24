@@ -1,11 +1,15 @@
 package me.weishu.kernelsu.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
         ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        this.mainBinding = activityMainBinding;
+        mainBinding = activityMainBinding;
         setContentView(activityMainBinding.getRoot());
 
         mainBinding.rbParamets.setChecked(true);
@@ -62,7 +66,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         showFragment();
+        mainBinding.openMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainBinding.drawer.openDrawer(GravityCompat.START);
+            }
+        });
+        //抽屉布局添加点击监听
+        mainBinding.drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
 
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+                drawerView.setClickable(true);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+
+            }
+        });
+        mainBinding.vpnSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, VpnSetActivity.class));
+            }
+        });
+
+        mainBinding.rootManger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, RootMangerActivity.class));
+            }
+        });
     }
 
 

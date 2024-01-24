@@ -20,13 +20,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.adapter.RestoreAdapter;
 import me.weishu.kernelsu.bean.EventMessage;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentResetBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
+import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.net.HttpUtils;
+import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 import me.weishu.kernelsu.utils.FileMetadata;
@@ -142,23 +146,45 @@ public class ResetFragment extends Fragment {
         }
 
         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"开始还原"));
-        String url = "http://127.0.0.1:1991/app/v1/resetApp?destPackageInfos=com.mmbox.xbrowser&fileID="+fileName;
-         HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
+//        String url = ApiUtils.BASE_URL+"/app/v1/resetApp?destPackageInfos=com.mmbox.xbrowser&fileID="+fileName;
+        CommonRetrofitManager.getInstance().restApp("com.mmbox.xbrowser",fileName).subscribe(new Consumer<HttpResult>() {
             @Override
-            public void onSuccess(String result) {
-                HttpResult httpResult = GsonUtils.buildGson().fromJson(result, HttpResult.class);
-                if ("1".equals(httpResult.getRet())) {
+            public void accept(HttpResult result) throws Exception {
+                if ("1".equals(result.getRet())) {
                     EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原完成"));
                 }else{
                     EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
                 }
             }
-
+        }, new Consumer<Throwable>() {
             @Override
-            public void onFailed() {
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
             }
         });
+//         HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
+//             @Override
+//             public void onSubscribe() {
+//
+//             }
+//
+//             @Override
+//            public void onSuccess(String result) {
+//                HttpResult httpResult = GsonUtils.buildGson().fromJson(result, HttpResult.class);
+//
+//            }
+//
+//             @Override
+//             public void onComplete() {
+//
+//             }
+//
+//             @Override
+//            public void onFailed() {
+//                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
+//            }
+//        });
 
 
     }

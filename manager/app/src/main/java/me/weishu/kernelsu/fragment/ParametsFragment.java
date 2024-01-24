@@ -32,9 +32,12 @@ import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.EventMessage;
+import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentParametsBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
+import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.net.HttpUtils;
+import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.EventCode;
 import me.weishu.kernelsu.utils.NumberUtils;
 import me.weishu.kernelsu.utils.SpUtils;
@@ -130,11 +133,11 @@ public class ParametsFragment extends Fragment {
                 String packageName = split[1];
                 int verIndex = NumberUtils.randNum(androidVers.length);
                 String sdkVer = androidVers[verIndex];
-                String url = "http://127.0.0.1:1991/app/v1/modifyPhone?destPackageInfos=" + packageName + "&sdkVersion=" + sdkVer;
+                String url = ApiUtils.BASE_URL+"/app/v1/modifyPhone?destPackageInfos=" + packageName + "&sdkVersion=" + sdkVer;
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "修改参数"));
-                HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
+                CommonRetrofitManager.getInstance().modifyPhone(packageName,sdkVer).subscribe(new Consumer<HttpResult>() {
                     @Override
-                    public void onSuccess(String result) {
+                    public void accept(HttpResult result) throws Exception {
                         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
                         if (!result.equals("err")) {
                             EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
@@ -142,12 +145,34 @@ public class ParametsFragment extends Fragment {
                             EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
                         }
                     }
-
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void onFailed() {
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
                         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
                     }
                 });
+//                HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
+//                    @Override
+//                    public void onSubscribe() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(String result) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailed() {
+//                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
+//                    }
+//                });
 
 
             }

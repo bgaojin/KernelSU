@@ -22,6 +22,7 @@ import me.weishu.kernelsu.bean.LoginResult;
 import me.weishu.kernelsu.databinding.LoginActivityBinding;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.net.HttpUtils;
+import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.SpUtils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,16 +36,25 @@ public class LoginActivity extends AppCompatActivity {
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
         String packageName = getPackageName();
-        boolean b = Natives.INSTANCE.becomeManager(packageName);
-        System.out.println("packageName="+packageName);
-        System.out.println("b="+b);
+        Natives.INSTANCE.becomeManager(packageName);
+
         String token = SpUtils.getInstance().getString("token", "");
         if (!TextUtils.isEmpty(token)) {
-            String url = "http://127.0.0.1:1991/app/v1/setToken?token="+token;
+            String url = ApiUtils.BASE_URL+ "/app/v1/setToken?token="+token;
             HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
                 @Override
+                public void onSubscribe() {
+
+                }
+
+                @Override
                 public void onSuccess(String result) {
-                    System.out.println("requestGet="+result);
+
+                }
+
+                @Override
+                public void onComplete() {
+
                 }
 
                 @Override
@@ -52,8 +62,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
+//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
             finish();
             return;
         }
@@ -78,12 +88,22 @@ public class LoginActivity extends AppCompatActivity {
 //9caea01ce00412a3c60bfe65ec89ae39
                 if (loginResult.getCode() == 1) {
                     String token = loginResult.getData().getToken();
-                    String url = "http://127.0.0.1:1991/app/v1/setToken?token="+token;
+                    String url =ApiUtils.BASE_URL+"/app/v1/setToken?token="+token;
 
                     HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
                         @Override
+                        public void onSubscribe() {
+
+                        }
+
+                        @Override
                         public void onSuccess(String result) {
                             System.out.println("requestGet="+result);
+                        }
+
+                        @Override
+                        public void onComplete() {
+
                         }
 
                         @Override

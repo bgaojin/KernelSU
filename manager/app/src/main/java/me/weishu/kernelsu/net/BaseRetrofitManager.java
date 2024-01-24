@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
+import me.weishu.kernelsu.net.interceptor.HttpUrlInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -32,6 +33,7 @@ public class BaseRetrofitManager {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
 //
 //        File cacheFile = new File(BaseApplication.getContext().getCacheDir(), "cache");
 //        Cache cache = new Cache(cacheFile, CACHE_MAX);
@@ -39,8 +41,9 @@ public class BaseRetrofitManager {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
-//                .addNetworkInterceptor(new HttpCacheInterceptor())
+//                .addInterceptor(interceptor)
+                .addInterceptor(new HttpUrlInterceptor())
+                .addNetworkInterceptor(interceptor)
 //                .cache(cache)
                 .build();
         return okHttpClient;

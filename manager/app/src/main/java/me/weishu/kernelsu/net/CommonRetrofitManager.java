@@ -2,6 +2,7 @@ package me.weishu.kernelsu.net;
 
 import io.reactivex.Observable;
 import me.weishu.kernelsu.bean.GetModelResult;
+import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.bean.LoginResult;
 
 /**
@@ -30,10 +31,26 @@ public class CommonRetrofitManager extends BaseRetrofitManager {
     }
 
     public Observable<GetModelResult> getModel(String token) {
-        return mCommonService.getModel(token,"Models").compose(RxSchedulers.applySchedulers());
+        return mCommonService.getModel(token, "Models").compose(RxSchedulers.applySchedulers());
     }
 
     public Observable<String> getFile(String path) {
         return mCommonService.getFile(path).compose(RxSchedulers.applySchedulers());
+    }
+
+    public Observable<HttpResult> restApp(String pkgName, String fileName) {
+        return mCommonService.restApp(pkgName, fileName).compose(RxSchedulers.applySchedulers());
+    }
+
+    public Observable<HttpResult> modifyPhone(String pkgName, String sdkVersion) {
+        return mCommonService.modifyPhone(pkgName, sdkVersion).compose(RxSchedulers.applySchedulers());
+    }
+
+    public Observable<HttpResult> startVpn(String ip, String port, String userName,String pwd) {
+        return mCommonService.startVpn(ip, port,userName,pwd).compose(RxSchedulers.applySchedulers());
+    }
+
+    public Observable<HttpResult> backUpApp(String pkgName) {
+        return mCommonService.backUpApp(pkgName).compose(RxSchedulers.applySchedulers());
     }
 }
