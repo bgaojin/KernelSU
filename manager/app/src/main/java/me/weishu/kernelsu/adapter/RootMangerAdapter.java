@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class RootMangerAdapter extends RecyclerView.Adapter<RootMangerAdapter.Vi
         holder.appName.setText(appItem.getAppName());
         holder.appIcon.setImageDrawable(appItem.getAppIcon());
         holder.appState.setText(appItem.getRootState());
+
         holder.checkBox.setChecked(appItem.isCheck());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -47,6 +49,23 @@ public class RootMangerAdapter extends RecyclerView.Adapter<RootMangerAdapter.Vi
                 appItem.setCheck(b);
             }
         });
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                holder.checkBox.setChecked(!holder.checkBox.isChecked());
+            }
+        });
+
+
+    }
+    public OnItemClickListener onItemClickListener;
+    public interface OnItemClickListener{
+        void onClick();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -57,6 +76,7 @@ public class RootMangerAdapter extends RecyclerView.Adapter<RootMangerAdapter.Vi
     static
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        ConstraintLayout parent;
         CheckBox checkBox;
 
         ImageView appIcon;
@@ -71,6 +91,7 @@ public class RootMangerAdapter extends RecyclerView.Adapter<RootMangerAdapter.Vi
             appIcon = view.appIcon;
             appName = view.appName;
             appState = view.appState;
+            parent = view.parent;
         }
     }
 }

@@ -36,6 +36,8 @@ import rikka.parcelablelist.ParcelableListSlice;
 public class RootMangerActivity extends AppCompatActivity {
 
     private IKsuInterface.Stub binder;
+    private List<AppItem> apps;
+    private RootMangerAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,55 +49,77 @@ public class RootMangerActivity extends AppCompatActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         inflate.appList.setLayoutManager(manager);
 
-        List<AppItem> apps = AppUtils.getApps(this);
+        apps = AppUtils.getApps(this);
 
-        RootMangerAdapter adapter = new RootMangerAdapter(this,apps);
+        adapter = new RootMangerAdapter(this, apps);
         inflate.appList.setAdapter(adapter);
 
         inflate.clearRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<RootResult> results = new ArrayList<>();
-                for (AppItem app : apps) {
-                    String pkgName = app.getPackageName();
-
-                    Natives.Profile profile = Natives.INSTANCE.getAppProfile(pkgName, app.getUid());
-
-                    Natives.Profile copy = profile.copy(pkgName,profile.getCurrentUid(),
-                            false,true,null,
-                            0,0,new ArrayList<>(),new ArrayList<>(),
-                            "u:r:su:s0",0,true,
-                            true,"");
-
-                    boolean result = Natives.INSTANCE.setAppProfile(copy);
-                    RootResult rootResult = new RootResult();
-                    rootResult.setAppName(app.getAppName());
-                    rootResult.setResult(result);
-                    results.add(rootResult);
-                }
-                String errMsg = "";
-                for (RootResult result : results) {
-                    if (!result.isResult()) {
-                        errMsg+=result.getAppName();
-                    }
-                }
-                if (!TextUtils.isEmpty(errMsg)){
-                    errMsg = "设置失败:"+errMsg;
-                    showMsg(errMsg);
-                }else{
-                    showMsg("设置成功");
-                }
-                adapter.notifyDataSetChanged();
+                setAppRoot(false);
             }
         });
 
         inflate.setRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                setAppRoot(true);
             }
         });
     }
+
+    private void setAppRoot(boolean allowSu) {
+        ArrayList<RootResult> results = new ArrayList<>();
+        for (AppItem app : apps) {
+            String pkgName = app.getPackageName();
+            if (!app.isCheck()) {
+                continue;
+            }
+            Natives.Profile profile = Natives.INSTANCE.getAppProfile(pkgName, app.getUid());
+
+            Natives.Profile copy = profile.copy(pkgName,profile.getCurrentUid(),
+                    allowSu,true,null,
+                    0,0,new ArrayList<>(),new ArrayList<>(),
+                    "u:r:su:s0",0,true,
+                    true,"");
+
+            boolean result = Natives.INSTANCE.setAppProfile(copy);
+            if (result&&allowSu){
+                app.setRootState("ROOT");
+            }else {
+                app.setRootState("UNKNOW");
+            }
+            //清空勾选
+            app.setCheck(false);
+            RootResult rootResult = new RootResult();
+            rootResult.setAppName(app.getAppName());
+            rootResult.setResult(result);
+            results.add(rootResult);
+        }
+        if (results.size()==0){
+            showMsg("请选择app");
+            return;
+        }
+        String errMsg = "";
+        for (RootResult result : results) {
+            if (!result.isResult()) {
+                errMsg+=result.getAppName();
+            }
+        }
+        if (!TextUtils.isEmpty(errMsg)){
+            errMsg = "设置失败:"+errMsg;
+            showMsg(errMsg);
+        }else{
+            showMsg("设置成功");
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initCheck(){
+
+    }
+
     private void showMsg(String msg) {
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }

@@ -35,35 +35,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
-        String packageName = getPackageName();
-        Natives.INSTANCE.becomeManager(packageName);
 
         String token = SpUtils.getInstance().getString("token", "");
         if (!TextUtils.isEmpty(token)) {
-            String url = ApiUtils.BASE_URL+ "/app/v1/setToken?token="+token;
-            HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
-                @Override
-                public void onSubscribe() {
 
-                }
-
-                @Override
-                public void onSuccess(String result) {
-
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-
-                @Override
-                public void onFailed() {
-
-                }
-            });
-//            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+//            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
             finish();
             return;
         }
@@ -85,35 +62,12 @@ public class LoginActivity extends AppCompatActivity {
         Disposable subscribe = CommonRetrofitManager.getInstance().login(strCode).subscribe(new Consumer<LoginResult>() {
             @Override
             public void accept(LoginResult loginResult) throws Exception {
-//9caea01ce00412a3c60bfe65ec89ae39
+
                 if (loginResult.getCode() == 1) {
                     String token = loginResult.getData().getToken();
-                    String url =ApiUtils.BASE_URL+"/app/v1/setToken?token="+token;
-
-                    HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
-                        @Override
-                        public void onSubscribe() {
-
-                        }
-
-                        @Override
-                        public void onSuccess(String result) {
-                            System.out.println("requestGet="+result);
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-
-                        @Override
-                        public void onFailed() {
-
-                        }
-                    });
-
+                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
                     SpUtils.getInstance().putString("token", token);
-//                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
+
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {

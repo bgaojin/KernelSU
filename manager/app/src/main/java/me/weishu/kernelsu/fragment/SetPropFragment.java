@@ -19,7 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class SetPropFragment extends Fragment {
 
 
     private TaskInfoDialog dialog;
+    private SetPropAdapter adapter;
 
 
     @Nullable
@@ -51,6 +55,7 @@ public class SetPropFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mRootView = inflater.inflate(R.layout.fragment_paramets, container, false);
         inflate = FragmentParametsBinding.bind(mRootView);
+        EventBus.getDefault().register(this);
         initData();
         return mRootView;
     }
@@ -66,7 +71,7 @@ public class SetPropFragment extends Fragment {
 
         List<AppItem> apps = AppUtils.getApps(getContext());
 
-        SetPropAdapter adapter = new SetPropAdapter(getContext(),apps);
+        adapter = new SetPropAdapter(getContext(),apps);
         inflate.appList.setAdapter(adapter);
 
         inflate.btnSaveParment.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +82,15 @@ public class SetPropFragment extends Fragment {
                 }
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "开始改机"));
                 String packageInfos ="";
-                for (AppItem app : apps) {
+                List<AppItem> list = adapter.getList();
+                for (AppItem app : list) {
+
                     if (app.isCheck()) {
                         packageInfos+=app.getPackageName()+",";
                     }
                 }
+
+
                 if (TextUtils.isEmpty(packageInfos)) {
                     return;
                 }
@@ -96,7 +105,7 @@ public class SetPropFragment extends Fragment {
                         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
                         if (!result.equals("err")) {
                             EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
-                            for (AppItem app : apps) {
+                            for (AppItem app : list) {
                                 app.setCheck(false);
                                 adapter.notifyDataSetChanged();
                             }
@@ -121,5 +130,18 @@ public class SetPropFragment extends Fragment {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true,priority = 1)
+    public void onReceiveMsg(EventMessage message) {
+        if (message.getType()== EventCode.SLELECT_SET_PROP) {
+            List<AppItem> apps = AppUtils.getApps(getContext());
+            adapter.setList(apps);
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //取消事件
+        EventBus.getDefault().unregister(this);
+    }
 }

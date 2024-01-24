@@ -51,7 +51,7 @@ public class ResetFragment extends Fragment {
 
     private RestoreAdapter restoreAdapter;
     private ArrayList<String> fileNames;
-    private String backPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/service/appBackup";
+    private String backPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/backupData";
     private ArrayList<String> list;
 
     @Nullable
@@ -99,29 +99,17 @@ public class ResetFragment extends Fragment {
     public void onReceiveMsg(EventMessage message) {
         if (message.getType()== EventCode.SLELECT_REST){
             list.clear();
-            System.out.println("backPath="+backPath);
-            String s1 = ShellUtils.fastCmd("su", "cd /sdcard/service/appBackup", "ls");
-            System.out.println("s1s1s1="+s1);
+
             File files = new File(backPath);
             if (!files.exists()) {
                 files.mkdirs();
             }
-            try {
-                File ficccles = new File(backPath+"/为什么.txt");
-                ficccles.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("dasf="+files.isDirectory());
-            System.out.println("dasf="+files.exists());
-            System.out.println("dasf="+files.exists());
+
             String[] strFileNames = files.list();
-            System.out.println("dasf="+strFileNames);
-            System.out.println("dasf="+files.listFiles().length);
             if (strFileNames==null){
                 return;
             }
-            System.out.println("dasf="+strFileNames.length);
+
             for (int i = 0; i < strFileNames.length; i++) {
                 try {
                     String s = strFileNames[i];
@@ -169,7 +157,7 @@ public class ResetFragment extends Fragment {
         }
 
         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"开始还原"));
-//        String url = ApiUtils.BASE_URL+"/app/v1/resetApp?destPackageInfos=com.mmbox.xbrowser&fileID="+fileName;
+
         CommonRetrofitManager.getInstance().restApp("com.mmbox.xbrowser",fileName).subscribe(new Consumer<HttpResult>() {
             @Override
             public void accept(HttpResult result) throws Exception {
@@ -186,28 +174,6 @@ public class ResetFragment extends Fragment {
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
             }
         });
-//         HttpUtils.requestGet(url, new HttpUtils.RequestListener() {
-//             @Override
-//             public void onSubscribe() {
-//
-//             }
-//
-//             @Override
-//            public void onSuccess(String result) {
-//                HttpResult httpResult = GsonUtils.buildGson().fromJson(result, HttpResult.class);
-//
-//            }
-//
-//             @Override
-//             public void onComplete() {
-//
-//             }
-//
-//             @Override
-//            public void onFailed() {
-//                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
-//            }
-//        });
 
 
     }

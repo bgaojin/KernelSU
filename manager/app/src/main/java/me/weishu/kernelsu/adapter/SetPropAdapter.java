@@ -2,6 +2,7 @@ package me.weishu.kernelsu.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -26,6 +28,15 @@ public class SetPropAdapter extends RecyclerView.Adapter<SetPropAdapter.ViewHold
         this.list = list;
     }
 
+    public void setList(List<AppItem> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
+    public List<AppItem> getList() {
+        return list;
+    }
+
     @NonNull
     @Override
     public SetPropAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,12 +50,20 @@ public class SetPropAdapter extends RecyclerView.Adapter<SetPropAdapter.ViewHold
         AppItem appItem = list.get(position);
         holder.appName.setText(appItem.getAppName());
         holder.appIcon.setImageDrawable(appItem.getAppIcon());
-        holder.appState.setText(appItem.getRootState());
+//        holder.appState.setText(appItem.getRootState());
         holder.checkBox.setChecked(appItem.isCheck());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 appItem.setCheck(b);
+            }
+        });
+
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                holder.checkBox.setChecked(!holder.checkBox.isChecked());
             }
         });
     }
@@ -64,13 +83,14 @@ public class SetPropAdapter extends RecyclerView.Adapter<SetPropAdapter.ViewHold
         TextView appName;
 
         TextView appState;
-
+        ConstraintLayout parent;
         ViewHolder(ItemSetPropBinding view) {
             super(view.getRoot());
             checkBox = view.checkBox;
             appIcon = view.appIcon;
             appName = view.appName;
             appState = view.appState;
+            parent = view.parent;
         }
     }
 }

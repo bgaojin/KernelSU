@@ -46,7 +46,7 @@
             <RadioButton
                 android:id="@+id/rb_paramets"
                 style="@style/driver_BottomNavigationMenu"
-                android:text="参数" />
+                android:text="改机" />
 
             <RadioButton
                 android:id="@+id/rb_backup"

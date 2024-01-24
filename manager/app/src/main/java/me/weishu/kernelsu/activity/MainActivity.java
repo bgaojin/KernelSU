@@ -2,6 +2,8 @@ package me.weishu.kernelsu.activity;
 
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -25,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.R;
@@ -33,6 +36,7 @@ import me.weishu.kernelsu.databinding.ActivityMainBinding;
 import me.weishu.kernelsu.fragment.BackUpFragment;
 import me.weishu.kernelsu.fragment.SetPropFragment;
 import me.weishu.kernelsu.fragment.ResetFragment;
+import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ActivityMainBinding mainBinding;
-    String[] permiss = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.MANAGE_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(Bundle paramBundle) {
         super.onCreate(paramBundle);
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         mainBinding = activityMainBinding;
         setContentView(activityMainBinding.getRoot());
-        mainBinding.tvTitle.title.setText("主页");
+        mainBinding.tvTitle.title.setText("改机");
         mainBinding.rbParamets.setChecked(true);
         mFragmentManager = getSupportFragmentManager();
         String[] tabSArray = new String[]{"one", "two", "three"};
@@ -64,10 +68,13 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.rb_paramets) {
                     mCurrIndex = 0;
-                    mainBinding.tvTitle.title.setText("主页");
+                    mainBinding.tvTitle.title.setText("改机");
+                    EventBus.getDefault().postSticky(new EventMessage(EventCode.SLELECT_SET_PROP));
                 } else if (i == R.id.rb_backup) {
                     mCurrIndex = 1;
                     mainBinding.tvTitle.title.setText("备份");
+                    EventBus.getDefault().postSticky(new EventMessage(EventCode.SLELECT_BACKUP));
+
                 } else if (i == R.id.rb_reset) {
                     mCurrIndex = 2;
                     mainBinding.tvTitle.title.setText("还原");
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, VpnSetActivity.class));
+                mainBinding.drawer.close();
             }
         });
 
@@ -118,49 +126,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, RootMangerActivity.class));
+                mainBinding.drawer.close();
             }
         });
 
         String packageName = getPackageName();
         boolean manager = Natives.INSTANCE.becomeManager(packageName);
-        if (manager){
+        if (manager) {
             try {
                 ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(packageName, 0);
                 Natives.Profile profile = Natives.INSTANCE.getAppProfile(packageName, applicationInfo.uid);
-                if (!profile.getAllowSu()){
-                    Natives.Profile copy = profile.copy(packageName,profile.getCurrentUid(),
-                            true,true,null,
-                            0,0,new ArrayList<>(),new ArrayList<>(),
-                            "u:r:su:s0",0,true,
-                            true,"");
+                if (!profile.getAllowSu()) {
+                    Natives.Profile copy = profile.copy(packageName, profile.getCurrentUid(),
+                            true, true, null,
+                            0, 0, new ArrayList<>(), new ArrayList<>(),
+                            "u:r:su:s0", 0, true,
+                            true, "");
 
-                    boolean result = Natives.INSTANCE.setAppProfile(copy);
-                    System.out.println("result="+result);
+                    Natives.INSTANCE.setAppProfile(copy);
+
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
 
         }
-
-//        requestPermission();
-//        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-//        Uri uri = Uri.fromParts("package", getPackageName(), null);
-//        intent.setData(uri);
-//        startActivity(intent);
-    }
-    private static final int PERMISSIONS_REQUEST_PHONE_STATE = 1;
-    public void requestPermission(){
-        ActivityCompat.requestPermissions(MainActivity.this,permiss,PERMISSIONS_REQUEST_PHONE_STATE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode==PERMISSIONS_REQUEST_PHONE_STATE){
-
+        boolean appInstalled = AppUtils.isAppInstalled(this, "com.android.ghost.service");
+        if (appInstalled){
+            boolean appAlive = AppUtils.isAppAlive(this, "com.android.ghost.service.http.NanoHttpService");
+            if (!appAlive){
+                Intent intent = new Intent();
+                intent.setData(Uri.parse("ghost://ghost.service.android.com/main"));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
+
     }
+
+
+
+
     private void showFragment() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(mFragmentTags.get(mCurrIndex));

@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
+        <me.weishu.kernelsu.view.ClearEditText
             android:id="@+id/et_login_account"
             android:layout_width="276dp"
             android:layout_height="50dp"
@@ -26,7 +26,7 @@
             android:drawablePadding="16dp"
             android:elevation="2dp"
             android:hint="请输入激活码"
-
+            android:paddingEnd="18dp"
             android:singleLine="true"
             android:paddingStart="10dp"
             />

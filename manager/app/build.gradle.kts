@@ -151,4 +151,5 @@ dependencies {
     implementation ("com.squareup.okhttp:okhttp-urlconnection:2.2.0")
 
     implementation ("org.greenrobot:eventbus:3.2.0")
+    implementation ("com.tencent.bugly:crashreport:latest.release")
 }

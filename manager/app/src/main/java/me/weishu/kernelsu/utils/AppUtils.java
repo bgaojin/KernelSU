@@ -1,6 +1,7 @@
 package me.weishu.kernelsu.utils;
 
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -9,6 +10,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +64,13 @@ public class AppUtils {
             appItem.setPackageName(packageName);
             Natives.Profile appProfile = Natives.INSTANCE.getAppProfile(packageName, appInfo.uid);
             appItem.setRootState(appProfile.getAllowSu() ? "ROOT" : "UNKNOW");
-            if (!"me.weishu.kernelsu".equals(packageName)) {
-                list.add(appItem);
+            if ("me.weishu.kernelsu".equals(packageName)) {
+               continue;
             }
-
+            if ("com.android.ghost.service".equals(packageName)) {
+               continue;
+            }
+            list.add(appItem);
         }
         return list;
     }
@@ -81,5 +87,29 @@ public class AppUtils {
             return false;
         }
         return false;
+    }
+
+    public static boolean isAppAlive(Context context,@NonNull String clsName) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo service : runningServices) {
+            String name = service.service.getClassName();
+            if (clsName.equals(name)) {
+                // Service 已经启动
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isAppInstalled(Context context, String packageName) {
+        try {
+            context.getPackageManager().getApplicationInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
