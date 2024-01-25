@@ -22,17 +22,17 @@ android {
     namespace = "me.weishu.kernelsu"
     signingConfigs {
         create("release") {
-            storeFile =
-                file("../singer/manger.jks")
-            storePassword = "android"
-            keyAlias = "ghapp"
-            keyPassword = "android"
+       //     storeFile =
+   //             file("../singer/manger.jks")
+     //       storePassword = "android"
+     //       keyAlias = "ghapp"
+    //        keyPassword = "android"
 
-//            storeFile =
-//                file("../singer/ghost.jks")
-//            storePassword = "android"
-//            keyAlias = "ghost"
-//            keyPassword = "android"
+           storeFile =
+               file("../singer/ghost.jks")
+           storePassword = "android"
+           keyAlias = "ghost"
+           keyPassword = "android"
         }
     }
     buildTypes {
