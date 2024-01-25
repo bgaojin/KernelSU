@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 默认圆角按钮样式 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:width="276dp" android:height="43dp">
+        <shape android:shape="rectangle">
+            <gradient android:type="linear" android:useLevel="true" android:startColor="@color/blue" android:endColor="@color/blue" android:angle="90" />
+            <corners android:topLeftRadius="21dp" android:topRightRadius="21dp" android:bottomLeftRadius="21dp" android:bottomRightRadius="21dp" />
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#0000ff</color>
+    <color name="color_bcbcbc">#bcbcbc</color>
+    <color name="color_4c4c4c">#4c4c4c</color>
+    <color name="color_54">#33545454</color>
+    <color name="moduser_white_33">#ff333333</color>
+    <color name="moduser_color_efefef">#efefef</color>
+    <color name="color_ff669900">#ff669900</color>
+    <color name="color_33545454">#33545454</color>
+</resources>
