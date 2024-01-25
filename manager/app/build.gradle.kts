@@ -20,14 +20,6 @@ val managerVersionName: String by rootProject.extra
 
 android {
     namespace = "me.weishu.kernelsu"
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            isShrinkResources = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
     signingConfigs {
         create("release") {
             storeFile =
@@ -43,6 +35,15 @@ android {
 //            keyPassword = "android"
         }
     }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs["release"]
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
     buildFeatures {
         aidl = true
         buildConfig = true
