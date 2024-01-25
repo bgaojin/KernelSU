@@ -3,13 +3,10 @@ package me.weishu.kernelsu.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 

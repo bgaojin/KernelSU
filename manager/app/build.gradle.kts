@@ -11,24 +11,38 @@ plugins {
 val managerVersionCode: Int by rootProject.extra
 val managerVersionName: String by rootProject.extra
 
-apksign {
-    storeFileProperty = "KEYSTORE_FILE"
-    storePasswordProperty = "KEYSTORE_PASSWORD"
-    keyAliasProperty = "KEY_ALIAS"
-    keyPasswordProperty = "KEY_PASSWORD"
-}
+//apksign {
+//    storeFileProperty = "KEYSTORE_FILE"
+//    storePasswordProperty = "KEYSTORE_PASSWORD"
+//    keyAliasProperty = "KEY_ALIAS"
+//    keyPasswordProperty = "KEY_PASSWORD"
+//}
 
 android {
     namespace = "me.weishu.kernelsu"
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("../singer/manger.jks")
+            storePassword = "android"
+            keyAlias = "ghapp"
+            keyPassword = "android"
 
+//            storeFile =
+//                file("../singer/ghost.jks")
+//            storePassword = "android"
+//            keyAlias = "ghost"
+//            keyPassword = "android"
+        }
+    }
     buildFeatures {
         aidl = true
         buildConfig = true
@@ -69,6 +83,9 @@ android {
                 kotlin.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
+    }
+    viewBinding{
+        enable = true
     }
 }
 
@@ -113,4 +130,22 @@ dependencies {
     implementation(libs.sheet.compose.dialogs.input)
 
     implementation(libs.markdown)
+
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    implementation ("io.reactivex.rxjava2:rxandroid:2.0.1")
+    implementation ("io.reactivex.rxjava2:rxjava:2.1.8")
+    implementation ("com.squareup.retrofit2:retrofit:2.4.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.4.0")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.4.0")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation( "com.jakewharton.rxrelay2:rxrelay:2.1.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp:okhttp-urlconnection:2.2.0")
+
+    implementation ("org.greenrobot:eventbus:3.2.0")
+    implementation ("com.tencent.bugly:crashreport:latest.release")
 }

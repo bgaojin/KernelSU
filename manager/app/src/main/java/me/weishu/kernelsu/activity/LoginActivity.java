@@ -10,19 +10,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-//import io.reactivex.disposables.Disposable;
-//import io.reactivex.functions.Consumer;
-
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.bean.LoginResult;
 import me.weishu.kernelsu.databinding.LoginActivityBinding;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
-import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.SpUtils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -65,8 +58,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (loginResult.getCode() == 1) {
                     String token = loginResult.getData().getToken();
-//                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
-                    setToken(token);
+                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
+//                    setToken(token);
                     SpUtils.getInstance().putString("token", token);
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));

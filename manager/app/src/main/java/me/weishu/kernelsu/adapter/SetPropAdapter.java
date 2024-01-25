@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import me.weishu.kernelsu.bean.AppItem;
-import me.weishu.kernelsu.databinding.ItemRootMangerBinding;
 import me.weishu.kernelsu.databinding.ItemSetPropBinding;
 
 public class SetPropAdapter extends RecyclerView.Adapter<SetPropAdapter.ViewHolder> {
@@ -39,14 +38,14 @@ public class SetPropAdapter extends RecyclerView.Adapter<SetPropAdapter.ViewHold
 
     @NonNull
     @Override
-    public SetPropAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemSetPropBinding inflate = ItemSetPropBinding.inflate(LayoutInflater.from(this.context));
         ViewHolder holder = new ViewHolder(inflate);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SetPropAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppItem appItem = list.get(position);
         holder.appName.setText(appItem.getAppName());
         holder.appIcon.setImageDrawable(appItem.getAppIcon());

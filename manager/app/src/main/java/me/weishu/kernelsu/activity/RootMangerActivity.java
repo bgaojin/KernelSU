@@ -23,7 +23,6 @@ import java.util.List;
 
 import me.weishu.kernelsu.IKsuInterface;
 import me.weishu.kernelsu.Natives;
-import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.adapter.RootMangerAdapter;
 import me.weishu.kernelsu.bean.AppItem;
 import me.weishu.kernelsu.bean.RootResult;

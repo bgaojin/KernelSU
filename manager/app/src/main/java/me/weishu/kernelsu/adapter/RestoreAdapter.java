@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-
 import java.util.HashMap;
 import java.util.List;
 

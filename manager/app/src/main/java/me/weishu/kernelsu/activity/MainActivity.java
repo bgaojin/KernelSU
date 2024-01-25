@@ -1,41 +1,33 @@
 package me.weishu.kernelsu.activity;
 
 
-import android.Manifest;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.EventMessage;
 import me.weishu.kernelsu.databinding.ActivityMainBinding;
 import me.weishu.kernelsu.fragment.BackUpFragment;
-import me.weishu.kernelsu.fragment.SetPropFragment;
 import me.weishu.kernelsu.fragment.ResetFragment;
+import me.weishu.kernelsu.fragment.SetPropFragment;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 

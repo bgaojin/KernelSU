@@ -3,7 +3,6 @@ package me.weishu.kernelsu.net;
 
 import com.google.gson.Gson;
 
-
 import java.util.concurrent.TimeUnit;
 
 import me.weishu.kernelsu.net.interceptor.HttpUrlInterceptor;

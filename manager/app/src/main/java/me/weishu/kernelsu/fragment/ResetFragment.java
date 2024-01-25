@@ -14,15 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.topjohnwu.superuser.Shell;
-import com.topjohnwu.superuser.ShellUtils;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -34,14 +31,10 @@ import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentResetBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
-import me.weishu.kernelsu.ui.util.KsuCli;
-import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 import me.weishu.kernelsu.utils.FileMetadata;
 import me.weishu.kernelsu.utils.FileUtils;
-import me.weishu.kernelsu.utils.GsonUtils;
 import me.weishu.kernelsu.utils.TarBackupReader;
 
 

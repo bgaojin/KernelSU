@@ -12,8 +12,6 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-
-
 import java.util.Objects;
 
 import me.weishu.kernelsu.R;

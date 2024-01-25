@@ -1,11 +1,7 @@
 package me.weishu.kernelsu.fragment;
 
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +27,8 @@ import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentBackupBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
-import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
-import me.weishu.kernelsu.utils.GsonUtils;
 
 public class BackUpFragment extends Fragment {
 

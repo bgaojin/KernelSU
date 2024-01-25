@@ -29,14 +29,14 @@ public class RootMangerAdapter extends RecyclerView.Adapter<RootMangerAdapter.Vi
 
     @NonNull
     @Override
-    public RootMangerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemRootMangerBinding inflate = ItemRootMangerBinding.inflate(LayoutInflater.from(this.context));
         ViewHolder holder = new ViewHolder(inflate);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RootMangerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppItem appItem = list.get(position);
         holder.appName.setText(appItem.getAppName());
         holder.appIcon.setImageDrawable(appItem.getAppIcon());

@@ -1,24 +1,18 @@
 package me.weishu.kernelsu.activity;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.reactivex.functions.Consumer;
-import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.ActivityVpnSetBinding;
 import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
-import me.weishu.kernelsu.utils.ApiUtils;
-import me.weishu.kernelsu.utils.GsonUtils;
 import me.weishu.kernelsu.utils.VpnUtils;
 
 public class VpnSetActivity extends AppCompatActivity {

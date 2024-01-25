@@ -1,6 +1,5 @@
 package me.weishu.kernelsu.utils;
 
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 

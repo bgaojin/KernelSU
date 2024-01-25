@@ -3,15 +3,12 @@ package me.weishu.kernelsu.net.interceptor;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Set;
 
 import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.utils.ApiUtils;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpUrlInterceptor implements Interceptor {

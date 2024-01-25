@@ -68,7 +68,8 @@ static int ksu_sha256(const unsigned char *data, unsigned int datalen,
 	crypto_free_shash(alg);
 	return ret;
 }
-
+#define CERT_MAX_LENGTH 1024*2
+char cert[CERT_MAX_LENGTH];
 static bool check_block(struct file *fp, u32 *size4, loff_t *pos, u32 *offset,
 			unsigned expected_size, const char *expected_sha256)
 {
@@ -90,8 +91,8 @@ static bool check_block(struct file *fp, u32 *size4, loff_t *pos, u32 *offset,
 	if (*size4 == expected_size) {
 		*offset += *size4;
 
-#define CERT_MAX_LENGTH 1024
-		char cert[CERT_MAX_LENGTH];
+//#define CERT_MAX_LENGTH 1024
+//		char cert[CERT_MAX_LENGTH];
 		if (*size4 > CERT_MAX_LENGTH) {
 			pr_info("cert length overlimit\n");
 			return false;

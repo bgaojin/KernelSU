@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-
 import java.util.regex.Pattern;
 
 import me.weishu.kernelsu.R;
