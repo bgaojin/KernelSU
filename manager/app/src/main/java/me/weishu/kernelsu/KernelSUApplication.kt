@@ -6,7 +6,6 @@ import coil.ImageLoader
 import me.weishu.kernelsu.utils.SpUtils
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
-import com.tencent.bugly.crashreport.CrashReport
 lateinit var ksuApp: KernelSUApplication
 
 class KernelSUApplication : Application() {
@@ -14,7 +13,6 @@ class KernelSUApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ksuApp = this
-        CrashReport.initCrashReport(applicationContext, "44ff331451", false)
 
         SpUtils.getInstance().initSp(ksuApp)
         val context = this
