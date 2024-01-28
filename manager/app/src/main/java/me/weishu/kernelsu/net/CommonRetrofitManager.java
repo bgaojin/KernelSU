@@ -14,8 +14,13 @@ public class CommonRetrofitManager extends BaseRetrofitManager {
     private CommonService mCommonService;
 
     public CommonRetrofitManager() {
-        //构造函数获取retrofit对象，并创建接口类的对象，拿到这个对象，可以调用具体的接口
-        mCommonService = getRetrofit().create(CommonService.class);
+        try{
+            //构造函数获取retrofit对象，并创建接口类的对象，拿到这个对象，可以调用具体的接口
+            mCommonService = getRetrofit().create(CommonService.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private static class SingletonHolder {

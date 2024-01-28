@@ -7,11 +7,11 @@ import java.util.concurrent.TimeUnit;
 
 import me.weishu.kernelsu.net.interceptor.HttpUrlInterceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 
 /**
  * @author: ji xin
@@ -30,8 +30,8 @@ public class BaseRetrofitManager {
 
     private OkHttpClient getOkHttpClient() {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 //
 //        File cacheFile = new File(BaseApplication.getContext().getCacheDir(), "cache");
@@ -42,7 +42,7 @@ public class BaseRetrofitManager {
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS)
 //                .addInterceptor(interceptor)
                 .addInterceptor(new HttpUrlInterceptor())
-                .addNetworkInterceptor(interceptor)
+//                .addNetworkInterceptor(interceptor)
 //                .cache(cache)
                 .build();
         return okHttpClient;
@@ -53,7 +53,7 @@ public class BaseRetrofitManager {
         Gson gson = GsonUtils.createGson(true).setLenient().create();
         retrofit = new Retrofit.Builder()
                 .client(getOkHttpClient())
-                .addConverterFactory(ScalarsConverterFactory.create())
+
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(BASE_URL)
