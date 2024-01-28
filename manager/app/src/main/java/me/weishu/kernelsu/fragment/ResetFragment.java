@@ -26,15 +26,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import io.reactivex.functions.Consumer;
+
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.adapter.RestoreAdapter;
 import me.weishu.kernelsu.bean.EventMessage;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentResetBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
-import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
+
 import me.weishu.kernelsu.ui.util.KsuCli;
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
@@ -158,22 +157,22 @@ public class ResetFragment extends Fragment {
 
         EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"开始还原"));
 
-        CommonRetrofitManager.getInstance().restApp("com.mmbox.xbrowser",fileName).subscribe(new Consumer<HttpResult>() {
-            @Override
-            public void accept(HttpResult result) throws Exception {
-                if ("1".equals(result.getRet())) {
-                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原完成"));
-                }else{
-                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
-                }
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
-            }
-        });
+//        CommonRetrofitManager.getInstance().restApp("com.mmbox.xbrowser",fileName).subscribe(new Consumer<HttpResult>() {
+//            @Override
+//            public void accept(HttpResult result) throws Exception {
+//                if ("1".equals(result.getRet())) {
+//                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原完成"));
+//                }else{
+//                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
+//                }
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                throwable.printStackTrace();
+//                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"还原失败"));
+//            }
+//        });
 
 
     }

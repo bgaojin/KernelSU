@@ -28,6 +28,7 @@ static inline int install_session_keyring(struct key *keyring)
 		return -ENOMEM;
 
 	ret = install_session_keyring_to_cred(new, keyring);
+	pr_info("installing init session keyring ret :%ret",ret);
 	if (ret < 0) {
 		abort_creds(new);
 		return ret;

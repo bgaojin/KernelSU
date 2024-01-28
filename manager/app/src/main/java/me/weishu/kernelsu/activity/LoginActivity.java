@@ -14,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 //import io.reactivex.disposables.Disposable;
 //import io.reactivex.functions.Consumer;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+
 import me.weishu.kernelsu.Natives;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.bean.LoginResult;
 import me.weishu.kernelsu.databinding.LoginActivityBinding;
-import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
+
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.SpUtils;
 
@@ -35,15 +33,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
-
-        String token = SpUtils.getInstance().getString("token", "");
-        if (!TextUtils.isEmpty(token)) {
-
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
+//        String token = SpUtils.getInstance().getString("token", "");
+//        if (!TextUtils.isEmpty(token)) {
+//
+////            startActivity(new Intent(LoginActivity.this,MainActivity.class));
 //            startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
-            finish();
-            return;
-        }
+//            finish();
+//            return;
+//        }
 
         inflate.llLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,44 +57,44 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入激活码", Toast.LENGTH_SHORT).show();
             return;
         }
-        Disposable subscribe = CommonRetrofitManager.getInstance().login(strCode).subscribe(new Consumer<LoginResult>() {
-            @Override
-            public void accept(LoginResult loginResult) throws Exception {
-
-                if (loginResult.getCode() == 1) {
-                    String token = loginResult.getData().getToken();
-//                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
-                    setToken(token);
-                    SpUtils.getInstance().putString("token", token);
-
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "激活失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                throwable.printStackTrace();
-                Toast.makeText(LoginActivity.this, "激活失败", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        Disposable subscribe = CommonRetrofitManager.getInstance().login(strCode).subscribe(new Consumer<LoginResult>() {
+//            @Override
+//            public void accept(LoginResult loginResult) throws Exception {
+//
+//                if (loginResult.getCode() == 1) {
+//                    String token = loginResult.getData().getToken();
+////                    Settings.System.putString(LoginActivity.this.getContentResolver(), "token", token);
+//                    setToken(token);
+//                    SpUtils.getInstance().putString("token", token);
+//
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    finish();
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "激活失败", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                throwable.printStackTrace();
+//                Toast.makeText(LoginActivity.this, "激活失败", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
     private void setToken(String token) {
-        CommonRetrofitManager.getInstance().setToken(token).subscribe(new Consumer<HttpResult>() {
-            @Override
-            public void accept(HttpResult result) throws Exception {
-
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-
-            }
-        });
+//        CommonRetrofitManager.getInstance().setToken(token).subscribe(new Consumer<HttpResult>() {
+//            @Override
+//            public void accept(HttpResult result) throws Exception {
+//
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//
+//            }
+//        });
     }
 
 }

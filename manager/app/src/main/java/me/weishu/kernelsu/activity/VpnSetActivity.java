@@ -11,12 +11,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.ActivityVpnSetBinding;
-import me.weishu.kernelsu.net.CommonRetrofitManager;
-import me.weishu.kernelsu.net.HttpUtils;
+
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.GsonUtils;
 import me.weishu.kernelsu.utils.VpnUtils;
@@ -61,24 +59,24 @@ public class VpnSetActivity extends AppCompatActivity {
                 }
 
 
-                CommonRetrofitManager.getInstance().startVpn(ip, port, userName, pwd).subscribe(new Consumer<HttpResult>() {
-                    @Override
-                    public void accept(HttpResult result) throws Exception {
-                        if ("1".equals(result.getRet())) {
-                            showMsg("开启成功");
-                        } else {
-                            showMsg("开启失败");
-                        }
-                        dialog.dismiss();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                        showMsg("开启失败");
-                        dialog.dismiss();
-                    }
-                });
+//                CommonRetrofitManager.getInstance().startVpn(ip, port, userName, pwd).subscribe(new Consumer<HttpResult>() {
+//                    @Override
+//                    public void accept(HttpResult result) throws Exception {
+//                        if ("1".equals(result.getRet())) {
+//                            showMsg("开启成功");
+//                        } else {
+//                            showMsg("开启失败");
+//                        }
+//                        dialog.dismiss();
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        throwable.printStackTrace();
+//                        showMsg("开启失败");
+//                        dialog.dismiss();
+//                    }
+//                });
 
             }
         });
@@ -94,24 +92,24 @@ public class VpnSetActivity extends AppCompatActivity {
                     dialog.show();
                 }
 
-                CommonRetrofitManager.getInstance().closeVpn().subscribe(new Consumer<HttpResult>() {
-                    @Override
-                    public void accept(HttpResult result) throws Exception {
-                        if ("1".equals(result.getRet())) {
-                            showMsg("关闭成功");
-                        } else {
-                            showMsg("关闭失败");
-                        }
-                        dialog.dismiss();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        throwable.printStackTrace();
-                        showMsg("关闭失败");
-                        dialog.dismiss();
-                    }
-                });
+//                CommonRetrofitManager.getInstance().closeVpn().subscribe(new Consumer<HttpResult>() {
+//                    @Override
+//                    public void accept(HttpResult result) throws Exception {
+//                        if ("1".equals(result.getRet())) {
+//                            showMsg("关闭成功");
+//                        } else {
+//                            showMsg("关闭失败");
+//                        }
+//                        dialog.dismiss();
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        throwable.printStackTrace();
+//                        showMsg("关闭失败");
+//                        dialog.dismiss();
+//                    }
+//                });
 
             }
         });
