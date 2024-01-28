@@ -41,6 +41,18 @@
 -keep class rx.** { *; }
 -keepclassmembers class rx.** { *; }
 -keepattributes Signature
+# RxJava2
+-dontwarn io.reactivex.**
+
+# RxJava2: If you are using RxAndroid (e.g. AndroidSchedulers)
+-dontwarn io.reactivex.android.**
+
+# RxJava2: If you are using RxJavaPlugins
+-dontwarn io.reactivex.plugins.**
+
+# RxJava2: If you are using RxJava internal classes
+-dontwarn io.reactivex.internal.**
+
 # Gson
 -keep class com.google.gson.stream.** { *; }
 -keepattributes EnclosingMethod
@@ -48,7 +60,7 @@
 # Gson
 -keep class me.weishu.kernelsu.bean.**{*;} # 自定义数据模型的bean目录
 
-
+#eventbus
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
@@ -59,4 +71,9 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+
 

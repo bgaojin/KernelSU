@@ -3,7 +3,7 @@ package me.weishu.kernelsu
 import android.app.Application
 import coil.Coil
 import coil.ImageLoader
-//import com.tencent.bugly.crashreport.CrashReport
+import com.tencent.bugly.crashreport.CrashReport
 import me.weishu.kernelsu.utils.SpUtils
 import me.zhanghai.android.appiconloader.coil.AppIconFetcher
 import me.zhanghai.android.appiconloader.coil.AppIconKeyer
@@ -16,7 +16,7 @@ class KernelSUApplication : Application() {
         super.onCreate()
         ksuApp = this
 
-//        CrashReport.initCrashReport(applicationContext, "44ff331451", false)
+        CrashReport.initCrashReport(applicationContext, "44ff331451", false)
 
         SpUtils.getInstance().initSp(ksuApp)
         val context = this

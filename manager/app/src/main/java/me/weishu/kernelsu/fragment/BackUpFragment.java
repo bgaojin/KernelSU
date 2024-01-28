@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.bean.AppItem;
 import me.weishu.kernelsu.bean.EventMessage;
@@ -31,6 +32,7 @@ import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentBackupBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 
+import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
@@ -106,22 +108,22 @@ public class BackUpFragment extends Fragment {
 
         String pkgName = split[1];
 
-//        CommonRetrofitManager.getInstance().backUpApp(pkgName).subscribe(new Consumer<HttpResult>() {
-//            @Override
-//            public void accept(HttpResult result) throws Exception {
-//                if ("1".equals(result.getRet())) {
-//                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份完成"));
-//                }else{
-//                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份失败"));
-//                }
-//            }
-//        }, new Consumer<Throwable>() {
-//            @Override
-//            public void accept(Throwable throwable) throws Exception {
-//                throwable.printStackTrace();
-//                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份失败"));
-//            }
-//        });
+        CommonRetrofitManager.getInstance().backUpApp(pkgName).subscribe(new Consumer<HttpResult>() {
+            @Override
+            public void accept(HttpResult result) throws Exception {
+                if ("1".equals(result.getRet())) {
+                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份完成"));
+                }else{
+                    EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份失败"));
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                throwable.printStackTrace();
+                EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,"备份失败"));
+            }
+        });
 
 
     }

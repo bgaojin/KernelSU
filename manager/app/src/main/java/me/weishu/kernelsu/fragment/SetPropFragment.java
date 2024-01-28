@@ -26,6 +26,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.adapter.RootMangerAdapter;
 import me.weishu.kernelsu.adapter.SetPropAdapter;
@@ -35,6 +37,7 @@ import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.FragmentParametsBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 
+import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 import me.weishu.kernelsu.utils.NumberUtils;
@@ -97,27 +100,27 @@ public class SetPropFragment extends Fragment {
                 String sdkVer = androidVers[verIndex];
 
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "修改参数"));
-//                Disposable subscribe = CommonRetrofitManager.getInstance().modifyPhone(packageInfos, sdkVer).subscribe(new Consumer<HttpResult>() {
-//                    @Override
-//                    public void accept(HttpResult result) throws Exception {
-//                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
-//                        if (!result.equals("err")) {
-//                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
-//                            for (AppItem app : list) {
-//                                app.setCheck(false);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        } else {
-//                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
-//                        }
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        throwable.printStackTrace();
-//                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
-//                    }
-//                });
+                Disposable subscribe = CommonRetrofitManager.getInstance().modifyPhone(packageInfos, sdkVer).subscribe(new Consumer<HttpResult>() {
+                    @Override
+                    public void accept(HttpResult result) throws Exception {
+                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
+                        if (!result.equals("err")) {
+                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
+                            for (AppItem app : list) {
+                                app.setCheck(false);
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
+                    }
+                });
             }
         });
 
