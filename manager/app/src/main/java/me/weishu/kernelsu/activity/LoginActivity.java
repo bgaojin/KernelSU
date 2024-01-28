@@ -27,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
-        startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//        startActivity(new Intent(LoginActivity.this, me.weishu.kernelsu.ui.MainActivity.class));
         String token = SpUtils.getInstance().getString("token", "");
         if (!TextUtils.isEmpty(token)) {
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
