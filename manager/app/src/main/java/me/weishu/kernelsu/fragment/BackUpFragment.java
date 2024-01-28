@@ -34,7 +34,7 @@ import me.weishu.kernelsu.dialog.TaskInfoDialog;
 import me.weishu.kernelsu.utils.ApiUtils;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
-import me.weishu.kernelsu.utils.GsonUtils;
+//import me.weishu.kernelsu.utils.GsonUtils;
 
 public class BackUpFragment extends Fragment {
 
@@ -60,7 +60,8 @@ public class BackUpFragment extends Fragment {
 
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bind.app.setAdapter((SpinnerAdapter) arrayAdapter);
-
+        String[] a = new String[4];
+        System.out.println(a.length);
         getApps();
 
 

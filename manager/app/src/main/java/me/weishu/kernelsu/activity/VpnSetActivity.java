@@ -16,7 +16,7 @@ import me.weishu.kernelsu.bean.HttpResult;
 import me.weishu.kernelsu.databinding.ActivityVpnSetBinding;
 
 import me.weishu.kernelsu.utils.ApiUtils;
-import me.weishu.kernelsu.utils.GsonUtils;
+//import me.weishu.kernelsu.utils.GsonUtils;
 import me.weishu.kernelsu.utils.VpnUtils;
 
 public class VpnSetActivity extends AppCompatActivity {
