@@ -3,6 +3,7 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.lsplugin.apksign)
     id("kotlin-parcelize")
@@ -73,11 +74,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        jvmTarget = "21"
     }
 
     packaging {
@@ -122,8 +119,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
 
-
-
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
@@ -134,12 +129,14 @@ dependencies {
     implementation(libs.com.google.accompanist.drawablepainter)
     implementation(libs.com.google.accompanist.navigation.animation)
     implementation(libs.com.google.accompanist.systemuicontroller)
+    implementation(libs.com.google.accompanist.webview)
 
     implementation(libs.compose.destinations.animations.core)
     ksp(libs.compose.destinations.ksp)
 
     implementation(libs.com.github.topjohnwu.libsu.core)
     implementation(libs.com.github.topjohnwu.libsu.service)
+    implementation(libs.com.github.topjohnwu.libsu.io)
 
     implementation(libs.dev.rikka.rikkax.parcelablelist)
 
@@ -172,6 +169,5 @@ dependencies {
 //    implementation("com.amap.api:location:3.3.0")
     implementation("org.greenrobot:eventbus:3.2.0")
     implementation("com.tencent.bugly:crashreport:latest.release")
+    implementation(libs.androidx.webkit)
 }
-
-
