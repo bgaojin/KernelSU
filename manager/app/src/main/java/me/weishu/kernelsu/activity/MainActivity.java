@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -22,6 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+
+import com.topjohnwu.superuser.Shell;
+import com.topjohnwu.superuser.ShellUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -61,7 +65,12 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         String[] tabSArray = new String[]{"one", "two", "three"};
         mFragmentTags = new ArrayList<>(Arrays.asList(tabSArray));
-
+//        if (accessibilityManager.isEnabled()) {
+//            ((ArrayList) F0).add("AccessibilityManager.isEnabled");
+//        }
+//        if (accessibilityManager.isTouchExplorationEnabled()) {
+//            ((ArrayList) F0).add("AccessibilityManager.isTouchExplorationEnabled");
+//        }
         RadioGroup radioGroup = findViewById(R.id.rg_navigation);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -129,8 +138,13 @@ public class MainActivity extends AppCompatActivity {
                 mainBinding.drawer.close();
             }
         });
+        //ifconfig wlan0 down &ifconfig wlan0 hw ether 00:11:22:33:44:55&ifconfig wlan0 up
+
+//        Shell.Result result = Shell.cmd("su", "ifconfig wlan0 hw ether 94:b4:6b:38:84:c8").exec();
+
 
         String packageName = getPackageName();
+
         boolean manager = Natives.INSTANCE.becomeManager(packageName);
         if (manager) {
             try {
@@ -146,15 +160,20 @@ public class MainActivity extends AppCompatActivity {
                     Natives.INSTANCE.setAppProfile(copy);
 
                 }
+//                Shell.Result result = Shell.cmd("su","cd /sdcard", "ls -a").exec();
+//                List<String> out = result.getOut();
+//                for (String s : out) {
+//                    System.out.println("sss="+s);
+//                }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
 
         }
         boolean appInstalled = AppUtils.isAppInstalled(this, "com.android.ghost.service");
-        if (appInstalled){
+        if (appInstalled) {
             boolean appAlive = AppUtils.isAppAlive(this, "com.android.ghost.service.http.NanoHttpService");
-            if (!appAlive){
+            if (!appAlive) {
                 Intent intent = new Intent();
                 intent.setData(Uri.parse("ghost://ghost.service.android.com/main"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -163,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
 
 
     private void showFragment() {

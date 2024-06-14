@@ -20,6 +20,13 @@ val managerVersionName: String by rootProject.extra
 
 android {
     signingConfigs {
+        getByName("debug") {
+            storeFile =
+                file("../singer/ghost.jks")
+            storePassword = "android"
+            keyPassword = "android"
+            keyAlias = "ghost"
+        }
         create("release") {
 //            storeFile =
 //                file("../singer/manger.jks")
@@ -48,6 +55,17 @@ android {
         }
     }
 
+    flavorDimensions += "main"
+
+    productFlavors {
+        create("kernelsu") {
+            applicationId = "com.ghost.control"
+//            applicationId = "me.weishu.kernelsu"
+            versionCode = 1
+            versionName = "1.0.0"
+        }
+    }
+
     buildFeatures {
         aidl = true
         buildConfig = true
@@ -70,7 +88,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    viewBinding{
+    viewBinding {
         enable = true
     }
     externalNativeBuild {
@@ -103,6 +121,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
+
+
 
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -139,17 +159,19 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-//    implementation ("io.reactivex.rxjava2:rxandroid:2.0.1")
-//    implementation ("io.reactivex.rxjava2:rxjava:2.1.8")
-//    implementation ("com.squareup.retrofit2:retrofit:2.4.0")
-//    implementation ("com.squareup.retrofit2:converter-gson:2.4.0")
-//    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
-//    implementation( "com.jakewharton.rxrelay2:rxrelay:2.1.0")
-    
-    //    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation("io.reactivex.rxjava2:rxandroid:2.0.1")
+    implementation("io.reactivex.rxjava2:rxjava:2.1.8")
+    implementation("com.squareup.retrofit2:retrofit:2.4.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.4.0")
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
+    implementation("com.jakewharton.rxrelay2:rxrelay:2.1.0")
+
+        implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 //    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 //    implementation ("com.squareup.okhttp:okhttp-urlconnection:2.2.0")
-
-    implementation ("org.greenrobot:eventbus:3.2.0")
-    implementation ("com.tencent.bugly:crashreport:latest.release")
+//    implementation("com.amap.api:location:3.3.0")
+    implementation("org.greenrobot:eventbus:3.2.0")
+    implementation("com.tencent.bugly:crashreport:latest.release")
 }
+
+

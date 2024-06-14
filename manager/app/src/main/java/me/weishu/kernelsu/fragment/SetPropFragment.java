@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.weishu.kernelsu.R;
 import me.weishu.kernelsu.adapter.RootMangerAdapter;
 import me.weishu.kernelsu.adapter.SetPropAdapter;
@@ -37,6 +39,7 @@ import me.weishu.kernelsu.databinding.FragmentParametsBinding;
 import me.weishu.kernelsu.dialog.TaskInfoDialog;
 
 
+import me.weishu.kernelsu.net.CommonRetrofitManager;
 import me.weishu.kernelsu.utils.AppUtils;
 import me.weishu.kernelsu.utils.EventCode;
 import me.weishu.kernelsu.utils.NumberUtils;
@@ -61,7 +64,7 @@ public class SetPropFragment extends Fragment {
     }
 
 
-    private String[] androidVers = new String[]{"13", "12", "11", "10", "9", "8"};
+    private String[] androidVers = new String[]{"13", "12L", "11", "10", "9", "8"};
 
     private void initData() {
 
@@ -69,9 +72,9 @@ public class SetPropFragment extends Fragment {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         inflate.appList.setLayoutManager(manager);
 
-        List<AppItem> apps = AppUtils.getApps(getContext());
+        List<AppItem> apps = AppUtils.getApps(getContext(), false);
 
-        adapter = new SetPropAdapter(getContext(),apps);
+        adapter = new SetPropAdapter(getContext(), apps);
         inflate.appList.setAdapter(adapter);
 
         inflate.btnSaveParment.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +84,12 @@ public class SetPropFragment extends Fragment {
                     dialog.show();
                 }
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "开始改机"));
-                String packageInfos ="";
+                String packageInfos = "";
                 List<AppItem> list = adapter.getList();
                 for (AppItem app : list) {
 
                     if (app.isCheck()) {
-                        packageInfos+=app.getPackageName()+",";
+                        packageInfos += app.getPackageName() + ",";
                     }
                 }
 
@@ -97,29 +100,45 @@ public class SetPropFragment extends Fragment {
 
                 int verIndex = NumberUtils.randNum(androidVers.length);
                 String sdkVer = androidVers[verIndex];
-
+//                String sdkVer = "13";
+                String sdkInt = "33";
+//                if ("13".equals(sdkVer)) {
+//                    sdkInt = "33";
+//                } else if ("12L".equals(sdkVer)) {
+//                    sdkInt = "32";
+//                } else if ("12".equals(sdkVer)) {
+//                    sdkInt = "31";
+//                } else if ("11".equals(sdkVer)) {
+//                    sdkInt = "30";
+//                } else if ("10".equals(sdkVer)) {
+//                    sdkInt = "29";
+//                }else{
+//
+//                    sdkVer = "13";
+//                }
+//                sdkInt = "33";
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "修改参数"));
-//                Disposable subscribe = CommonRetrofitManager.getInstance().modifyPhone(packageInfos, sdkVer).subscribe(new Consumer<HttpResult>() {
-//                    @Override
-//                    public void accept(HttpResult result) throws Exception {
-//                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
-//                        if (!result.equals("err")) {
-//                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
-//                            for (AppItem app : list) {
-//                                app.setCheck(false);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        } else {
-//                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
-//                        }
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        throwable.printStackTrace();
-//                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
-//                    }
-//                });
+                Disposable subscribe = CommonRetrofitManager.getInstance().modifyPhone(packageInfos, sdkVer, sdkInt).subscribe(new Consumer<HttpResult>() {
+                    @Override
+                    public void accept(HttpResult result) throws Exception {
+                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "参数修改成功"));
+                        if (result.getRet().equals("1")) {
+                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机成功"));
+                            for (AppItem app : list) {
+                                app.setCheck(false);
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO,  result.getMsg()));
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                        EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "改机失败"));
+                    }
+                });
             }
         });
 
@@ -130,10 +149,10 @@ public class SetPropFragment extends Fragment {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true,priority = 1)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 1)
     public void onReceiveMsg(EventMessage message) {
-        if (message.getType()== EventCode.SLELECT_SET_PROP) {
-            List<AppItem> apps = AppUtils.getApps(getContext());
+        if (message.getType() == EventCode.SLELECT_SET_PROP) {
+            List<AppItem> apps = AppUtils.getApps(getContext(), false);
             adapter.setList(apps);
         }
     }

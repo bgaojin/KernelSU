@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class RootMangerActivity extends AppCompatActivity {
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         inflate.appList.setLayoutManager(manager);
 
-        apps = AppUtils.getApps(this);
+        apps = AppUtils.getApps(this,true);
 
         adapter = new RootMangerAdapter(this, apps);
         inflate.appList.setAdapter(adapter);
@@ -114,10 +115,21 @@ public class RootMangerActivity extends AppCompatActivity {
             showMsg("设置成功");
         }
         adapter.notifyDataSetChanged();
+        setRootPkg();
     }
 
-    private void initCheck(){
+    private void setRootPkg(){
+        String rootPkgs ="";
+        for (AppItem app : apps) {
+            String rootState = app.getRootState();
+            if ("ROOT".equals(rootState)){
+                String packageName = app.getPackageName();
+                rootPkgs+=packageName+",";
+            }
 
+        }
+
+        Settings.System.putString(getContentResolver(),"xzz_set_pkgs",rootPkgs);
     }
 
     private void showMsg(String msg) {
