@@ -2,7 +2,7 @@
 
 ## Check if your device is supported
 
-Download KernelSU manager APP from [GitHub Releases](https://github.com/tiann/KernelSU/releases) or [Coolapk market](https://www.coolapk.com/apk/me.weishu.kernelsu), and install it to your device:
+Download KernelSU manager APP from [GitHub Releases](https://github.com/tiann/KernelSU/releases) and install it to your device:
 
 - If the app shows `Unsupported`, it means **You should compile the kernel yourself**, KernelSU won't and never provide a boot image for you to flash.
 - If the app shows `Not installed`, then your devices is officially supported by KernelSU.
@@ -43,6 +43,12 @@ w      .x         .y       -zzz           -k            -something
 Note that the SubLevel in the kernel version is not part of the KMI! That means that `5.10.101-android12-9-g30979850fc20` has the same KMI as `5.10.137-android12-9-g30979850fc20`!
 :::
 
+### Security patch level {#security-patch-level}
+
+Newer Android devices may have anti-rollback mechanisms in place that do not allow flashing a boot image with an old security patch level. For example, if your device kernel is `5.10.101-android12-9-g30979850fc20`, its security patch is `2023-11`; even if you flash the kernel consistent with the kernel KMI, if the security patch level is older than `2023- 11`(such as `2023-06`), then it may cause bootloop.
+
+Therefore, kernels with latest security patch levels are preferred while maintaining KMI consistency.
+
 ### Kernel version vs. Android version
 
 Please note: **Kernel version and Android version are not necessarily the same!**
@@ -51,55 +57,117 @@ If you find that your kernel version is `android12-5.10.101`, but your Android s
 
 ## Introduction
 
-There are several installation methods for KernelSU, each suitable for a different scenario, so please choose as needed.
+Since version `0.9.0`, KernelSU supports two running modes on GKI devices:
 
-1. Install with custom Recovery (e.g. TWRP)
-2. Install with a kernel flash app, such as Franco Kernel Manager
-3. Install with fastboot using the boot.img provided by KernelSU
-4. Repair the boot.img manually and install it
+1. `GKI`: Replace the original kernel of the device with the **Generic Kernel Image** (GKI) provided by KernelSU.
+2. `LKM`: Load the **Loadable Kernel Module** (LKM) into the device kernel without replacing the original kernel.
 
-## Install with custom Recovery
+These two modes are suitable for different scenarios, and you can choose according to your needs.
 
-Prerequisite: Your device must have a custom Recovery, such as TWRP; if not or only official Recovery is available, use another method.
+### GKI Mode {#gki-mode}
 
-Step:
+In GKI mode, the original kernel of the device will be replaced with the generic kernel image provided by KernelSU. The advantages of GKI mode are:
 
-1. From the [Release page](https://github.com/tiann/KernelSU/releases) of KernelSU, download the zip package starting with AnyKernel3 that matches your phone version; for example, the phone kernel version is `android12-5.10. 66`, then you should download the file `AnyKernel3-android12-5.10.66_yyyy-MM.zip` (where `yyyy` is the year and `MM` is the month).
-2. Reboot the phone into TWRP.
-3. Use adb to put AnyKernel3-*.zip into the phone /sdcard and choose to install it in the TWRP GUI; or you can directly `adb sideload AnyKernel-*.zip` to install.
+1. Strong universality, suitable for most devices; for example, Samsung has enabled KNOX devices, and LKM mode cannot operate. There are also some niche modified devices that can only use GKI mode;
+2. Can be used without relying on official firmware; no need to wait for official firmware updates, as long as the KMI is consistent, it can be used;
 
-PS. This method is suitable for any installation (not limited to initial installation or subsequent upgrades), as long as you use TWRP.
+### LKM Mode {#lkm-mode}
 
-## Install with Kernel Flasher
+In LKM mode, the original kernel of the device will not be replaced, but the loadable kernel module will be loaded into the device kernel. The advantages of LKM mode are:
 
-Prerequisite: Your device must be rooted. For example, you have installed Magisk to get root, or you have installed an old version of KernelSU and need to upgrade to another version of KernelSU; if your device is not rooted, please try other methods.
+1. Will not replace the original kernel of the device; if you have special requirements for the original kernel of the device, or you want to use KernelSU while using a third-party kernel, you can use LKM mode;
+2. It is more convenient to upgrade and OTA; when upgrading KernelSU, you can directly install it in the manager without manually flashing; after the system OTA, you can directly install it to the second slot without manually flashing;
+3. Suitable for some special scenarios; for example, LKM can also be loaded with temporary ROOT permissions. Since it does not need to replace the boot partition, it will not trigger avb and will not cause the device to be bricked;
+4. LKM can be temporarily uninstalled; if you want to temporarily cancel root, you can uninstall LKM, this process does not require flashing partitions, or even rebooting the device; if you want to root again, just reboot the device;
 
-Step:
+:::tip Coexistence of two modes
+After opening the manager, you can see the current mode of the device on the homepage; note that the priority of GKI mode is higher than that of LKM. For example, if you use GKI kernel to replace the original kernel, and use LKM to patch the GKI kernel, then LKM will be ignored, and the device will always run in GKI mode.
+:::
 
-1. Download the AnyKernel3 zip; refer to the section *Installing with Custom Recovery* for downloading instructions.
-2. Open the Kernel Flash App and use the provided AnyKernel3 zip to flash.
+### Which one to choose? {#which-one}
 
-If you haven't used the Kernel flash App before, the following are the more popular ones.
+If your device is a mobile phone, we recommend that you prioritize LKM mode; if your device is an emulator, WSA, or Waydroid, we recommend that you prioritize GKI mode.
 
-1. [Kernel Flasher](https://github.com/capntrips/KernelFlasher/releases)
-2. [Franco Kernel Manager](https://play.google.com/store/apps/details?id=com.franco.kernel)
-3. [Ex Kernel Manager](https://play.google.com/store/apps/details?id=flar2.exkernelmanager)
+## LKM Installation
 
-PS. This method is more convenient when upgrading KernelSU and can be done without a computer (backup first!). .
+### Get the official firmware
+
+To use LKM mode, you need to get the official firmware and then patch it on the basis of the official firmware; if you use a third-party kernel, you can use the `boot.img` of the third-party kernel as the official firmware.
+
+There are many ways to get the official firmware. If your device supports `fastboot boot`, then we recommend **the most recommended and simplest** method is to use `fastboot boot` to temporarily boot the GKI kernel provided by KernelSU, then install the manager, and finally install it directly in the manager; this method does not require you to manually download the official firmware, nor do you need to manually extract the boot.
+
+If your device does not support `fastboot boot`, then you may need to manually download the official firmware package and then extract the boot from it.
+
+Unlike GKI mode, LKM mode will modify the `ramdisk`, so on devices with Android 13, it needs to patch the `init_boot` partition instead of the `boot` partition; while GKI mode always operates the `boot` partition.
+
+### Use the manager
+
+Open the manager, click the installation icon in the upper right corner, and several options will appear:
+
+1. Select and patch a file; if your phone does not have root permissions, you can choose this option, and then select your official firmware, and the manager will automatically patch it; you only need to flash this patched file to permanently obtain root permissions;
+2. Install directly; if your phone is already rooted, you can choose this option, the manager will automatically get your device information, and then automatically patch the official firmware, and then flash it; you can consider using `fastboot boot` KernelSU's GKI kernel to get temporary root and install the manager, and then use this option; this is also the main way to upgrade KernelSU;
+3. Install to another partition; if your device supports A/B partition, you can choose this option, the manager will automatically patch the official firmware, and then install it to another partition; this method is suitable for devices after OTA, you can directly install it to another partition after OTA, and then restart the device;
+
+### Use the command line
+
+If you don’t want to use the manager, you can also use the command line to install LKM; the `ksud` tool provided by KernelSU can help you quickly patch the official firmware and then flash it.
+
+This tool supports macOS, Linux, and Windows. You can download the corresponding version from [GitHub Release](https://github.com/tiann/KernelSU/releases).
+
+Usage: `ksud boot-patch` You can check the command line help for specific usage.
+
+```sh
+oriole:/ # ksud boot-patch -h
+Patch boot or init_boot images to apply KernelSU
+
+Usage: ksud boot-patch [OPTIONS]
+
+Options:
+  -b, --boot <BOOT>              boot image path, if not specified, will try to find the boot image automatically
+  -k, --kernel <KERNEL>          kernel image path to replace
+  -m, --module <MODULE>          LKM module path to replace, if not specified, will use the builtin one
+  -i, --init <INIT>              init to be replaced
+  -u, --ota                      will use another slot when boot image is not specified
+  -f, --flash                    Flash it to boot partition after patch
+  -o, --out <OUT>                output path, if not specified, will use current directory
+      --magiskboot <MAGISKBOOT>  magiskboot path, if not specified, will use builtin one
+      --kmi <KMI>                KMI version, if specified, will use the specified KMI
+  -h, --help                     Print help
+```
+
+A few options that need to be explained:
+
+1. The `--magiskboot` option can specify the path of magiskboot. If it is not specified, ksud will look for it in the environment variables; if you don’t know how to get magiskboot, you can check [here](#patch-boot-image);
+2. The `--kmi` option can specify the `KMI` version. If the kernel name of your device does not follow the KMI specification, you can specify it through this option;
+
+The most common usage is:
+
+```sh
+ksud boot-patch -b <boot.img> --kmi android13-5.10
+```
+
+## GKI mode Installation
+
+There are several installation methods for GKI mode, each suitable for a different scenario, so please choose as needed.
+
+1. Install with fastboot using the boot.img provided by KernelSU
+2. Install with a kernel flash app, such as KernelFlasher
+3. Repair the boot.img manually and install it
+4. Install with custom Recovery (e.g. TWRP)
 
 ## Install with boot.img provided by KernelSU
 
-This method does not require you to have TWRP, nor does it require your phone to have root privileges; it is suitable for your first installation of KernelSU.
+If your device's `boot.img` uses a commonly used compression format, you can use the GKI images provided by KernelSU to flash it directly. It does not require TWRP or self-patching the image.
 
 ### Find proper boot.img
 
-KernelSU provides a generic boot.img for GKI devices and you should flush the boot.img to the boot partition of the device.
+KernelSU provides a generic boot.img for GKI devices and you should flash the boot.img to the boot partition of the device.
 
-You can download boot.img from [GitHub Release](https://github.com/tiann/KernelSU/releases), please note that you should use the correct version of boot.img. For example, if your device displays the kernel `android12-5.10.101` , you need to download `android-5.10.101_yyyy-MM.boot-<format>.img`. (Keep KMI consistent!)
+You can download boot.img from [GitHub Release](https://github.com/tiann/KernelSU/releases), please note that you should use the correct version of boot.img. If you don't know which file to download, please carefully read the description of [KMI](#kmi) and [Security Patch Level](#security-patch-level) in this document.
 
-Where `<format>` refers to the kernel compression format of your official boot.img, please check the kernel compression format of your original boot.img, you should use the correct format, e.g. `lz4`, `gz`; if you use an incorrect compression format, you may encounter bootloop.
+Normally, there are three boot files in different formats under the same KMI and security patch level. They are all the same except for the kernel compression format. Please check the kernel compression format of your original boot.img. You should use the correct format, such as `lz4`, `gz`; if you use an incorrect compression format, you may encounter bootloop after flashing boot.
 
-::: info
+:::info Compression format of boot.img
 1. You can use magiskboot to get the compression format of your original boot; of course you can also ask other, more experienced kids with the same model as your device. Also, the compression format of the kernel usually does not change, so if you boot successfully with a certain compression format, you can try that format later.
 2. Xiaomi devices usually use `gz` or **uncompressed**.
 3. For Pixel devices, follow below instructions.
@@ -125,16 +193,38 @@ After flashing is complete, you should reboot your device:
 fastboot reboot
 ```
 
-## Patch boot.img manually
+## Install with Kernel Flasher
+
+Step:
+
+1. Download the AnyKernel3 zip. If you don't know which file to download, please carefully read the description of [KMI](#kmi) and [Security Patch Level](#security-patch-level) in this document.
+2. Open the Kernel Flash App (grant necessary root permissions) and use the provided AnyKernel3 zip to flash.
+
+This way requires the kernel flash App to have root permissions. You can use the following methods to achieve this:
+
+1. Your device has rooted. For example, you have installed KernelSU and want to upgrade to the latest version, or you have rooted through other methods (such as Magisk).
+2. If your phone is not rooted, but the phone supports the temporary boot method of `fastboot boot boot.img`, you can use the GKI image provided by KernelSU to temporarily boot your device, obtain temporary root permissions, and then use the kernel flash Flash the writer to obtain permanent root privileges.
+
+1. [Kernel Flasher](https://github.com/capntrips/KernelFlasher/releases)
+2. [Franco Kernel Manager](https://play.google.com/store/apps/details?id=com.franco.kernel)
+3. [Ex Kernel Manager](https://play.google.com/store/apps/details?id=flar2.exkernelmanager)
+
+PS. This method is more convenient when upgrading KernelSU and can be done without a computer (backup first!). .
+
+## Patch boot.img manually{#patch-boot-image}
 
 For some devices, the boot.img format is not so common, such as not `lz4`, `gz` and uncompressed; the most typical is Pixel, its boot.img format is `lz4_legacy` compressed, ramdisk may be `gz` may also be `lz4_legacy` compression; at this time, if you directly flash the boot.img provided by KernelSU, the phone may not be able to boot; at this time, you can manually patch the boot.img to achieve.
 
-There are generally two patch methods:
+It's always recommended to use `magiskboot` to patch images, there are two ways:
 
-1. [Android-Image-Kitchen](https://forum.xda-developers.com/t/tool-android-image-kitchen-unpack-repack-kernel-ramdisk-win-android-linux-mac.2073775/)
-2. [magiskboot](https://github.com/topjohnwu/Magisk/releases)
+1. [magiskboot](https://github.com/topjohnwu/Magisk/releases)
+2. [magiskboot_build](https://github.com/ookiineko/magiskboot_build/releases/tag/last-ci)
 
-Among them, Android-Image-Kitchen is suitable for operation on PC, and magiskboot needs the cooperation of mobile phone.
+The official build of `magiskboot` can only run on Android devices, if you want to run it on PC, you can try the second one.
+
+::: tip
+Android-Image-Kitchen is not recommended now, because it doesn't handle the boot metadata(such as security patch level) correctly, thus it may not work on some devices.
+:::
 
 ### Preparation
 
@@ -142,24 +232,41 @@ Among them, Android-Image-Kitchen is suitable for operation on PC, and magiskboo
 2. Download the AnyKernel3 zip file provided by KernelSU that matches the KMI version of your device (you can refer to the *Install with custom Recovery*).
 3. Unpack the AnyKernel3 package and get the `Image` file, which is the kernel file of KernelSU.
 
-### Using Android-Image-Kitchen
-
-1. Download Android-Image-Kitchen to your computer.
-2. Put stock boot.img to Android-Image-Kitchen's root folder.
-3. Execute `./unpackimg.sh boot.img` at root directory of Android-Image-Kitchen, this command would unpack boot.img and you will get some files.
-4. Replace `boot.img-kernel` in the `split_img` directory with the `Image` you extracted from AnyKernel3 (note the name change to boot.img-kernel).
-5. Execute `./repackimg.sh` at root directory of 在 Android-Image-Kitchen; And you will get a file named `image-new.img`; Flash this boot.img by fastboot(Refer to the previous section).
-
-### Using magiskboot
+### Using magiskboot on Android devices {#using-magiskboot-on-Android-devices}
 
 1. Download latest Magisk from [Release Page](https://github.com/topjohnwu/Magisk/releases)
-2. Rename Magisk-*.apk to Magisk-vesion.zip and unzip it.
-3. Push `Magisk-v25.2/lib/arm64-v8a/libmagiskboot.so` to your device by adb: `adb push Magisk-v25.2/lib/arm64-v8a/libmagiskboot.so /data/local/tmp/magiskboot`
+2. Rename `Magisk-*(version).apk` to `Magisk-*.zip` and unzip it.
+3. Push `Magisk-*/lib/arm64-v8a/libmagiskboot.so` to your device by adb: `adb push Magisk-*/lib/arm64-v8a/libmagiskboot.so /data/local/tmp/magiskboot`
 4. Push stock boot.img and Image in AnyKernel3 to your device.
 5. Enter adb shell and cd `/data/local/tmp/` directory, then `chmod +x magiskboot`
 6. Enter adb shell and cd `/data/local/tmp/` directory, execute `./magiskboot unpack boot.img` to unpack `boot.img`, you will get a `kernel` file, this is your stock kernel.
 7. Replace `kernel` with `Image`: `mv -f Image kernel`
 8. Execute `./magiskboot repack boot.img` to repack boot img, and you will get a `new-boot.img` file, flash this file to device by fastboot.
+
+### Using magiskboot on Windows/macOS/Linux PC{#using-magiskboot-on-PC}
+
+1. Download proper `magiskboot` for your OS from [magiskboot_build](https://github.com/ookiineko/magiskboot_build/releases/tag/last-ci)
+2. Prepare stock boot.img and Image in your PC.
+3. `chmod +x magiskboot`
+4. Enter the proper directory, execute `./magiskboot unpack boot.img` to unpack `boot.img`, you will get a `kernel` file, this is your stock kernel.
+5. Replace `kernel` with `Image`: `mv -f Image kernel`
+6. Execute `./magiskboot repack boot.img` to repack boot img, and you will get a `new-boot.img` file, flash this file to device by fastboot.
+
+::: info
+Official `magiskboot` can run `Linux` device normally, if you are a Linux user, you can use official build.
+:::
+
+## Install with custom Recovery
+
+Prerequisite: Your device must have a custom Recovery, such as TWRP; if not or only official Recovery is available, use another method.
+
+Step:
+
+1. From the [Release page](https://github.com/tiann/KernelSU/releases) of KernelSU, download the zip package starting with AnyKernel3 that matches your phone version; for example, the phone kernel version is `android12-5.10. 66`, then you should download the file `AnyKernel3-android12-5.10.66_yyyy-MM.zip` (where `yyyy` is the year and `MM` is the month).
+2. Reboot the phone into TWRP.
+3. Use adb to put AnyKernel3-*.zip into the phone /sdcard and choose to install it in the TWRP GUI; or you can directly `adb sideload AnyKernel-*.zip` to install.
+
+PS. This method is suitable for any installation (not limited to initial installation or subsequent upgrades), as long as you use TWRP.
 
 ## Other methods
 
@@ -167,3 +274,5 @@ In fact, all these installation methods have only one main idea, which is to **r
 
 1. First install Magisk, get root privileges through Magisk and then use the kernel flasher to flash in the AnyKernel zip from KernelSU.
 2. Use some flashing toolkit on PCs to flash in the kernel provided KernelSU.
+
+But if it doesn't work, please try `magiskboot` way.

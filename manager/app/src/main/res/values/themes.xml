@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Base.Theme.Oneghost" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Theme.KernelSU" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.KernelSU.WebUI" parent="Theme.KernelSU">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.KernelSU" parent="Theme.AppCompat.Light.NoActionBar"/>

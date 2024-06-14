@@ -4,6 +4,10 @@ KernelSU 提供了一个模块机制，它可以在保持系统分区完整性�
 
 KernelSU 的模块运作机制与 Magisk 几乎是一样的，如果你熟悉 Magisk 模块的开发，那么开发 KernelSU 的模块大同小异，你可以跳过下面有关模块的介绍，只需要了解 [KernelSU 模块与 Magisk 模块的异同](difference-with-magisk.md)。
 
+## 模块界面
+
+KernelSU 的模块支持显示界面并与用户交互，请参阅 [WebUI 文档](module-webui.md)。
+
 ## Busybox
 
 KernelSU 提供了一个功能完备的 BusyBox 二进制文件（包括完整的SELinux支持）。可执行文件位于 `/data/adb/ksu/bin/busybox`。
@@ -85,7 +89,7 @@ KernelSU 模块就是一个放置在 `/data/adb/modules` 内且满足如下结�
 ```
 
 ::: tip 与 Magisk 的差异
-KernelSU 没有内置的针对 Zygisk 的支持，因此模块中没有 Zygisk 相关的内容，但你可以通过 [ZygiskOnKernelSU](https://github.com/Dr-TSNG/ZygiskOnKernelSU) 来支持 Zygisk 模块，此时 Zygisk 模块的内容与 Magisk 所支持的 Zygisk 是完全相同的。
+KernelSU 没有内置的针对 Zygisk 的支持，因此模块中没有 Zygisk 相关的内容，但你可以通过 [ZygiskNext](https://github.com/Dr-TSNG/ZygiskNext) 来支持 Zygisk 模块，此时 Zygisk 模块的内容与 Magisk 所支持的 Zygisk 是完全相同的。
 :::
 
 ### module.prop

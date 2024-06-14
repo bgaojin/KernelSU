@@ -40,26 +40,32 @@ Starting from Android 13, the kernel is built by `bazel`:
 tools/bazel build --config=fast //common:kernel_aarch64_dist
 ```
 
+:::info
+For some Android 14 Kernel, to make Wi-Fi/Bluetooth work. It may be necessary to remove all the GKI protected exports:
+
+```sh
+rm common/android/abi_gki_protected_exports_*
+```
+:::
+
 ## Build Kernel with KernelSU
 
 If you can build the kernel successfully, then build KernelSU is so easy, Select any one run in Kernel source root dir:
 
-- Latest tag(stable)
+::: code-group
 
-```sh
+```sh[Latest tag(stable)]
 curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 ```
 
-- main branch(dev)
-
-```sh
+```sh[ main branch(dev)]
 curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
 ```
 
-- Select tag(Such as v0.5.2)
-
-```sh
+```sh[Select tag(Such as v0.5.2)]
 curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.5.2
 ```
+
+:::
 
 And then rebuild the kernel and you will get a kernel image with KernelSU!
