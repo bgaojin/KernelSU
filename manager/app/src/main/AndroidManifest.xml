@@ -24,18 +24,18 @@
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
         android:requestLegacyExternalStorage="true"
-        android:icon="@mipmap/icon2"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.KernelSU"
-        tools:targetApi="34">
         android:usesCleartextTraffic="true"
-        tools:targetApi="33">
+        tools:targetApi="34">
+
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.KernelSU">
+            android:theme="@style/Theme.KernelSU2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,11 +46,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.webui.WebUIActivity"
-            android:autoRemoveFromRecents="true"
-            android:documentLaunchMode="intoExisting"
-            android:exported="false"
-            android:theme="@style/Theme.KernelSU.WebUI" />
+
 <!--        <activity-->
 <!--            android:name=".ui.MainActivity"-->
 <!--            android:exported="true"-->
@@ -60,16 +56,16 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.KernelSU">
+            android:theme="@style/Theme.KernelSU2">
         </activity>
         <activity
             android:name=".activity.VpnSetActivity"
             android:exported="true"
-            android:theme="@style/Theme.KernelSU"/>
+            android:theme="@style/Theme.KernelSU2"/>
         <activity
             android:name=".activity.RootMangerActivity"
             android:exported="true"
-            android:theme="@style/Theme.KernelSU"/>
+            android:theme="@style/Theme.KernelSU2"/>
 
 
 

@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         String token = SpUtils.getInstance().getString("token", "");
 
 //        不需要激活验证
-//          token = "4e3ae5a9cb23f38775ceb185e1fc7f2a";
+          token = "4e3ae5a9cb23f38775ceb185e1fc7f2a";
         if (!TextUtils.isEmpty(token)) {
             Settings.System.putString(getContentResolver(), "token", token);
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
