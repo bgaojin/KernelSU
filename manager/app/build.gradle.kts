@@ -93,6 +93,7 @@ android {
             path("src/main/cpp/CMakeLists.txt")
         }
     }
+    ndkVersion = "26.1.10909125"
 
     applicationVariants.all {
         outputs.forEach {
