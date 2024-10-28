@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">XZZ</string>
+    <string name="app_name" translatable="false">控制</string>
 <!--    <string name="app_name" translatable="false">test</string>-->
     <string name="home">Strona główna</string>
     <string name="home_not_installed">Nie zainstalowano</string>

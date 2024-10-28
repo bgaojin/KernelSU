@@ -64,7 +64,7 @@ public class SetPropFragment extends Fragment {
     }
 
 
-    private String[] androidVers = new String[]{"13", "12L", "11", "10", "9", "8"};
+    private String[] androidVers = new String[]{"13", "12L", "11", "10"};
 
     private void initData() {
 
@@ -100,23 +100,23 @@ public class SetPropFragment extends Fragment {
 
                 int verIndex = NumberUtils.randNum(androidVers.length);
                 String sdkVer = androidVers[verIndex];
+                System.out.println("sdkVer="+sdkVer);
 //                String sdkVer = "13";
                 String sdkInt = "33";
-//                if ("13".equals(sdkVer)) {
-//                    sdkInt = "33";
-//                } else if ("12L".equals(sdkVer)) {
-//                    sdkInt = "32";
-//                } else if ("12".equals(sdkVer)) {
-//                    sdkInt = "31";
-//                } else if ("11".equals(sdkVer)) {
-//                    sdkInt = "30";
-//                } else if ("10".equals(sdkVer)) {
-//                    sdkInt = "29";
-//                }else{
-//
-//                    sdkVer = "13";
-//                }
-//                sdkInt = "33";
+                if ("13".equals(sdkVer)) {
+                    sdkInt = "33";
+                } else if ("12L".equals(sdkVer)) {
+                    sdkInt = "32";
+                } else if ("12".equals(sdkVer)) {
+                    sdkInt = "31";
+                } else if ("11".equals(sdkVer)) {
+                    sdkInt = "30";
+                } else if ("10".equals(sdkVer)) {
+                    sdkInt = "29";
+                }else{
+                    sdkVer = "13";
+                }
+                sdkInt = "33";
                 EventBus.getDefault().post(new EventMessage(EventCode.SET_TASK_INFO, "修改参数"));
                 Disposable subscribe = CommonRetrofitManager.getInstance().modifyPhone(packageInfos, sdkVer, sdkInt).subscribe(new Consumer<HttpResult>() {
                     @Override

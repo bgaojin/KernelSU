@@ -3,10 +3,14 @@ package me.weishu.kernelsu.activity;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.media.ImageReader;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 showFragment();
             }
         });
+        test();
         showFragment();
         mainBinding.openMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,9 +186,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+
     }
 
+    public static void test() {
+//        ShellUt
+//        Shell.Result result = Shell.cmd("su","cd /data/data/com.tencent.mm/shared_prefs","ls -a").exec();
+        Shell.Result result = Shell.cmd("su","cd /data/data/com.tencent.mm/shared_prefs","cat recovery_statistic.xml").exec();
+        List<String> out = result.getOut();
+        for (String file : out) {
+            System.out.println("file2="+file);
 
+        }
+    }
     private void showFragment() {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(mFragmentTags.get(mCurrIndex));

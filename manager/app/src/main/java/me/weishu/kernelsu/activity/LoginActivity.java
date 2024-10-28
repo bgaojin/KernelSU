@@ -1,5 +1,7 @@
 package me.weishu.kernelsu.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -8,9 +10,12 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,6 +27,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -46,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         inflate = LoginActivityBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
         boolean b = Natives.INSTANCE.becomeManager(getPackageName());
+        System.out.println("b=="+b);
         setVolume();
         if (b) {
             KsuCliKt.install();
@@ -70,11 +78,21 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+//        ArrayList arrayList = new ArrayList();
+//        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService("input_method");
+//        List list = inputMethodManager.getInputMethodList();
+//        Iterator iterator = list.iterator();
+//        while(iterator.hasNext()) {
+//
+//            Object object = iterator.next();
+//            String string = ((InputMethodInfo) object).toString();
+//
+//            arrayList.add(string);
+//        }
         String token = SpUtils.getInstance().getString("token", "");
 
 //        不需要激活验证
-//          token = "4e3ae5a9cb23f38775ceb185e1fc7f2a";
+          token = "4e3ae5a9cb23f38775ceb185e1fc7f2a";
         if (!TextUtils.isEmpty(token)) {
             Settings.System.putString(getContentResolver(), "token", token);
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -90,17 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    public boolean hasSu() {
-        Process process;
-        try {
-            process = Runtime.getRuntime().exec(new String[]{"su", "-c", "echo"});
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = reader.readLine();
-            return line != null && line.contains("root");
-        } catch (IOException e) {
-            return false;
-        }
-    }
+
+
     private void setVolume() {
         AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -115,6 +124,14 @@ public class LoginActivity extends AppCompatActivity {
         amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
         amanager.setStreamMute(AudioManager.STREAM_RING, true);
         amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+        amanager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+
+        // 禁止振动的示例
+
+//        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  //获取震动器实例
+//        long[] pattern = {100, 400, 100, 400};   // 停止 开启 停止 开启
+//        vibrator.vibrate(pattern, 1);           //重复两次上面的pattern 如果只想震动一次，index设为-1
+        //vibrator.vibrate(2500);//单位是毫秒
     }
 
 
